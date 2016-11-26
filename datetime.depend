@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1480120638 source:d:\skydrive\programmation\c++\datetime\datetime.cpp
+	"include/datetime.h"
+
+1480120992 d:\skydrive\programmation\c++\datetime\include\datetime.h
+	<ctime>
+	<stdio.h>
+	<string>
+	<stdlib.h>
+	<stdexcept>
+	<math.h>
+
+1480120752 source:d:\skydrive\programmation\c++\datetime\main.cpp
+	<iostream>
+	<assert.h>
+	"include/datetime.h"
+	<cstring>
+
