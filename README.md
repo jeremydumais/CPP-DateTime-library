@@ -1,31 +1,36 @@
-# Jed-CPP-DateTime-library
+##Jed C++ DateTime library is a simple Date and time library built in C++.
 
-Jed CPP DateTime library is a simple Date and time library build in C++.
-
-Here's some examples
+####Here's some examples
 
 //Get the current date and time
-datetime dtTest = datetime();
+	
+	datetime dtTest = datetime();
 
 //Create a known date
-datetime dtTest = datetime(2016, 11, 25);
+	
+	datetime dtTest = datetime(2016, 11, 25);
 
 //Create a known date with time (year, month, day, hour, minute, second)
-datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
+	
+	datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
 
 //Add a week to a date
-datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
-dtTest.add_days(7);
+
+	datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
+	dtTest.add_days(7);
 
 //Substract a week from a date
-datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
-dtTest.add_days(-7);
+
+	datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
+	dtTest.add_days(-7);
 
 //Display the date in standard form (yyyy-MM-dd HH:mm:ss)
-datetime dtTest = datetime();
-cout << dtTest.to_string() << endl;
+	
+	datetime dtTest = datetime();
+	cout << dtTest.to_string() << endl;
 
 Methods available:
+	
 	string to_string();
 	string to_shortdate_string();
 	int get_year();
