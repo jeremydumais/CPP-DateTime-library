@@ -207,6 +207,119 @@ void test_is_leapyear()
     delete dtTest;
 }
 
+void test_add_hours()
+{
+    datetime dtTest = datetime(2015, 02, 14, 11);
+    dtTest.add_hours(2);
+    assert(strcmp(dtTest.to_string().c_str(), "2015-02-14 13:00:00")==0);
+
+    dtTest = datetime(2015, 02, 14, 23);
+    dtTest.add_hours(2);
+    assert(strcmp(dtTest.to_string().c_str(), "2015-02-15 01:00:00")==0);
+
+    dtTest = datetime(2015, 02, 14, 01);
+    dtTest.add_hours(-48);
+    assert(strcmp(dtTest.to_string().c_str(), "2015-02-12 01:00:00")==0);
+}
+
+void test_add_minutes()
+{
+    datetime dtTest = datetime(2015, 02, 14, 11, 11);
+    dtTest.add_minutes(30);
+    assert(strcmp(dtTest.to_string().c_str(), "2015-02-14 11:41:00")==0);
+
+    dtTest = datetime(2015, 02, 14, 11, 00);
+    dtTest.add_minutes(90);
+    assert(strcmp(dtTest.to_string().c_str(), "2015-02-14 12:30:00")==0);
+
+    dtTest = datetime(2015, 02, 14, 00, 00);
+    dtTest.add_minutes(-90);
+    assert(strcmp(dtTest.to_string().c_str(), "2015-02-13 22:30:00")==0);
+}
+
+void test_add_seconds()
+{
+    datetime dtTest = datetime(2015, 02, 14, 11, 11, 11);
+    dtTest.add_seconds(30);
+    assert(strcmp(dtTest.to_string().c_str(), "2015-02-14 11:11:41")==0);
+
+    dtTest = datetime(2015, 02, 14, 11, 11, 00);
+    dtTest.add_seconds(90);
+    assert(strcmp(dtTest.to_string().c_str(), "2015-02-14 11:12:30")==0);
+
+    dtTest = datetime(2015, 02, 14, 14, 00, 00);
+    dtTest.add_seconds(-90);
+    assert(strcmp(dtTest.to_string().c_str(), "2015-02-14 13:58:30")==0);
+}
+
+void test_operator_less()
+{
+    datetime dtTest = datetime(2015, 02, 14, 14, 00, 00);
+    datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 01);
+    assert(dtTest < dtTest2);
+
+    dtTest = datetime(2015, 02, 14, 14, 00, 00);
+    dtTest2 = datetime();
+    assert(dtTest < dtTest2);
+
+    dtTest = datetime(2015, 02, 14, 14, 00, 00);
+    dtTest2 = datetime(2015, 02, 14, 14, 00, 00);
+    assert(!(dtTest < dtTest2));
+}
+
+void test_operator_less_equal()
+{
+    datetime dtTest = datetime(2015, 02, 14, 14, 00, 00);
+    datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 01);
+    assert(dtTest <= dtTest2);
+
+    dtTest = datetime(2015, 02, 14, 14, 00, 00);
+    dtTest2 = datetime();
+    assert(dtTest <= dtTest2);
+
+    dtTest = datetime(2015, 02, 14, 14, 00, 00);
+    dtTest2 = datetime(2015, 02, 14, 14, 00, 00);
+    assert(dtTest <= dtTest2);
+
+    dtTest = datetime(2015, 02, 14, 14, 00, 01);
+    dtTest2 = datetime(2015, 02, 14, 14, 00, 00);
+    assert(!(dtTest <= dtTest2));
+}
+
+void test_operator_greater()
+{
+    datetime dtTest = datetime(2015, 02, 14, 14, 00, 01);
+    datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 00);
+    assert(dtTest > dtTest2);
+
+    dtTest = datetime();
+    dtTest2 = datetime(2015, 02, 14, 14, 00, 00);
+    assert(dtTest > dtTest2);
+
+    dtTest = datetime(2015, 02, 14, 14, 00, 00);
+    dtTest2 = datetime(2015, 02, 14, 14, 00, 00);
+    assert(!(dtTest > dtTest2));
+}
+
+void test_operator_greater_equal()
+{
+    datetime dtTest = datetime(2015, 02, 14, 14, 00, 01);
+    datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 00);
+    assert(dtTest >= dtTest2);
+
+    dtTest = datetime();
+    dtTest2 = datetime(2015, 02, 14, 14, 00, 00);
+    assert(dtTest >= dtTest2);
+
+    dtTest = datetime(2015, 02, 14, 14, 00, 00);
+    dtTest2 = datetime(2015, 02, 14, 14, 00, 00);
+    assert(dtTest >= dtTest2);
+
+    dtTest = datetime(2015, 02, 14, 14, 00, 00);
+    dtTest2 = datetime(2015, 02, 14, 14, 00, 01);
+    assert(!(dtTest >= dtTest2));
+}
+
 int main()
 {
     // Unit tests
@@ -217,16 +330,32 @@ int main()
     test_add_months();
     test_add_years();
     test_is_leapyear();
+    test_add_hours();
+    test_add_minutes();
+    test_add_seconds();
+    test_operator_less();
+    test_operator_less_equal();
+    test_operator_greater();
+    test_operator_greater_equal();
 
-    datetime dtTest = datetime();
+    datetime dtTest = datetime(2016,11,27,20,23,22);
+    datetime dtTest2 = datetime();
+    dtTest2.add_minutes(-30);
+    dtTest.add_hours(1);
+    cout << dtTest.to_string() << endl;
+    cout << dtTest2.to_string() << endl;
+    cout << endl;
+
+    if (dtTest >= dtTest2)
+        cout << "Plus grand" << endl;
     /*datetime *dtTest2 = new datetime(1982,8,18);
     datetime dtTest3(*dtTest2);
     delete dtTest2;
     cout << dtTest3.to_shortdate_string() << endl;*/
-    dtTest.add_months(-22);
-    cout << dtTest.to_string() << endl;
+    cout << dtTest << endl;
     //delete dtTest;
     //delete dtTest2;
+
 
     return 0;
 }

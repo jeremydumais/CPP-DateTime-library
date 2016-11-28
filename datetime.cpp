@@ -4,8 +4,9 @@
 datetime::datetime()
 {
     time_t now = time(0);
-    this->timeInfo = localtime(&now);
-    this->auto_created = true;
+    tm* tm_now = localtime(&now);
+    timeInfo = new tm();
+    _copy_from(tm_now);
 }
 
 datetime::datetime(int year, int month, int day, int hour, int minute, int second)
@@ -29,37 +30,32 @@ datetime::datetime(int year, int month, int day, int hour, int minute, int secon
         throw invalid_argument("minute must be between 0 and 59");
     if (second < 0 || second > 59)
         throw invalid_argument("second must be between 0 and 59");
-    this->timeInfo = new tm();
-    this->timeInfo->tm_year = year - 1900;
-    this->timeInfo->tm_mon = month - 1;
-    this->timeInfo->tm_mday = day;
-    this->timeInfo->tm_hour = hour;
-    this->timeInfo->tm_min = minute;
-    this->timeInfo->tm_sec = second;
-    this->auto_created = false;
+    timeInfo = new tm();
+    timeInfo->tm_year = year - 1900;
+    timeInfo->tm_mon = month - 1;
+    timeInfo->tm_mday = day;
+    timeInfo->tm_hour = hour;
+    timeInfo->tm_min = minute;
+    timeInfo->tm_sec = second;
+    mktime(timeInfo);
 }
 
 datetime::datetime(const datetime &other)
 {
-    this->auto_created = other.auto_created;
-    this->timeInfo = new tm();
-    this->timeInfo->tm_year = other.timeInfo->tm_year;
-    this->timeInfo->tm_mon = other.timeInfo->tm_mon;
-    this->timeInfo->tm_mday = other.timeInfo->tm_mday;
-    this->timeInfo->tm_hour = other.timeInfo->tm_hour;
-    this->timeInfo->tm_min = other.timeInfo->tm_min;
-    this->timeInfo->tm_sec = other.timeInfo->tm_sec;
+    timeInfo = new tm();
+    _copy_from(other.timeInfo);
 }
 
-const datetime& datetime::operator=(const datetime &)
+const datetime& datetime::operator=(const datetime &dt)
 {
+    if (this != &dt)
+        _copy_from(dt.timeInfo);
     return *this;
 }
 
 datetime::~datetime()
 {
-    if (!this->auto_created)
-        delete this->timeInfo;
+    delete timeInfo;
 }
 
 bool datetime::_is_leapyear(int year)
@@ -73,7 +69,13 @@ bool datetime::_is_leapyear(int year)
 string datetime::to_string()
 {
     char retVal[128] = "";
-    sprintf(retVal, "%d-%02d-%02d %02d:%02d:%02d", this->get_year(), this->get_month(), this->get_day(), this->get_hour(), this->get_minute(), this->get_second() );
+    sprintf(retVal, "%d-%02d-%02d %02d:%02d:%02d",
+            get_year(),
+            get_month(),
+            get_day(),
+            get_hour(),
+            get_minute(),
+            get_second() );
     return string(retVal);
 
 }
@@ -81,43 +83,46 @@ string datetime::to_string()
 string datetime::to_shortdate_string()
 {
     char retVal[128] = "";
-    sprintf(retVal, "%d-%02d-%02d", this->get_year(), this->get_month(), this->get_day());
+    sprintf(retVal, "%d-%02d-%02d",
+            get_year(),
+            get_month(),
+            get_day());
     return string(retVal);
 }
 
 int datetime::get_year()
 {
-    return this->timeInfo->tm_year + 1900;
+    return timeInfo->tm_year + 1900;
 }
 
 int datetime::get_month()
 {
-    return this->timeInfo->tm_mon+1;
+    return timeInfo->tm_mon+1;
 }
 
 int datetime::get_day()
 {
-    return this->timeInfo->tm_mday;
+    return timeInfo->tm_mday;
 }
 
 int datetime::get_hour()
 {
-    return this->timeInfo->tm_hour;
+    return timeInfo->tm_hour;
 }
 
 int datetime::get_minute()
 {
-    return this->timeInfo->tm_min;
+    return timeInfo->tm_min;
 }
 
 int datetime::get_second()
 {
-    return this->timeInfo->tm_sec;
+    return timeInfo->tm_sec;
 }
 
 void datetime::add_years(int nb_years)
 {
-    this->timeInfo->tm_year += nb_years;
+    timeInfo->tm_year += nb_years;
 }
 
 void datetime::add_months(int nb_months)
@@ -126,34 +131,92 @@ void datetime::add_months(int nb_months)
     int nb_year = ceil(nb_months / 12);
     int nb_months_final = nb_months % 12;
 
-    if (this->timeInfo->tm_mon + nb_months_final > 11)  // tm_mon is from 0 to 11
+    if (timeInfo->tm_mon + nb_months_final > 11)  // tm_mon is from 0 to 11
     {
         nb_year++;
-        nb_months_final =  (this->timeInfo->tm_mon + nb_months_final) - 12;
-        this->timeInfo->tm_mon = nb_months_final;
+        nb_months_final =  (timeInfo->tm_mon + nb_months_final) - 12;
+        timeInfo->tm_mon = nb_months_final;
     }
     else
-        this->timeInfo->tm_mon += nb_months_final;
+        timeInfo->tm_mon += nb_months_final;
 
-    this->timeInfo->tm_year += nb_year;
+    timeInfo->tm_year += nb_year;
 }
 
 void datetime::add_days(int nb_days)
 {
-    this->add_seconds(nb_days * ONE_DAY);
+    add_seconds(nb_days * ONE_DAY);
+}
+
+void datetime::add_hours(int nb_hours)
+{
+    add_seconds(nb_hours * ONE_HOUR);
+}
+
+void datetime::add_minutes(int nb_minutes)
+{
+    add_seconds(nb_minutes * ONE_MINUTE);
 }
 
 void datetime::add_seconds(int nb_seconds)
 {
-    time_t new_seconds = mktime(this->timeInfo) + nb_seconds;
-    if (!this->auto_created)
-        delete this->timeInfo;
-    this->timeInfo = localtime(&new_seconds);
-    this->auto_created = true;
+    time_t new_seconds = mktime(timeInfo) + nb_seconds;
+    delete timeInfo;
+    tm* tm_new_time = localtime(&new_seconds);
+    timeInfo = new tm();
+    _copy_from(tm_new_time);
 }
 
 bool datetime::is_leapyear()
 {
-    return this->_is_leapyear(this->get_year());
+    return _is_leapyear(get_year());
 }
 
+void datetime::_copy_from(const tm * otm)
+{
+    timeInfo->tm_year = otm->tm_year;
+    timeInfo->tm_mon = otm->tm_mon;
+    timeInfo->tm_mday = otm->tm_mday;
+    timeInfo->tm_hour = otm->tm_hour;
+    timeInfo->tm_min = otm->tm_min;
+    timeInfo->tm_sec = otm->tm_sec;
+    timeInfo->tm_isdst = otm->tm_isdst;
+    timeInfo->tm_wday = otm->tm_wday;
+    timeInfo->tm_yday = otm->tm_yday;
+}
+
+// Operators
+std::ostream& operator<<(std::ostream& os, const datetime& dt)
+{
+    char retVal[128] = "";
+    sprintf(retVal, "%d-%02d-%02d %02d:%02d:%02d",
+            dt.timeInfo->tm_year + 1900,
+            dt.timeInfo->tm_mon + 1,
+            dt.timeInfo->tm_mday,
+            dt.timeInfo->tm_hour,
+            dt.timeInfo->tm_min,
+            dt.timeInfo->tm_sec);
+    os << retVal;
+
+    return os;
+}
+
+bool operator<(const datetime& mdt, const datetime& odt)
+{
+    return mktime(mdt.timeInfo) < mktime(odt.timeInfo);
+}
+
+bool operator>(const datetime& mdt, const datetime& odt)
+{
+    return mktime(odt.timeInfo) < mktime(mdt.timeInfo);
+}
+
+bool operator<=(const datetime& mdt, const datetime& odt)
+{
+    return !(mktime(mdt.timeInfo) > mktime(odt.timeInfo));
+}
+
+bool operator>=(const datetime& mdt, const datetime& odt)
+{
+    return !(mktime(mdt.timeInfo) < mktime(odt.timeInfo));
+}
