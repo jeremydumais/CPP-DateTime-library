@@ -36,16 +36,16 @@ Methods available:
 	string to_string();
 	string to_shortdate_string();
 	int get_year();
-        int get_month();
-        int get_day();
-        int get_hour();
-        int get_minute();
-        int get_second();
-        void add_years(int nb_years);
-        void add_months(int nb_months);
-        void add_days(int nb_days);
-        void add_hours(int nb_hours);
-        void add_minutes(int nb_minutes);
-        void add_seconds(int nb_seconds);
-        bool is_leapyear();
+	int get_month();
+	int get_day();
+	int get_hour();
+	int get_minute();
+	int get_second();
+	void add_years(int nb_years);
+	void add_months(int nb_months);
+	void add_days(int nb_days);
+	void add_hours(int nb_hours);
+	void add_minutes(int nb_minutes);
+	void add_seconds(int nb_seconds);
+	bool is_leapyear();
  
