@@ -1,6 +1,6 @@
 #Jed C++ DateTime Library
 
-##Jed C++ DateTime library is a simple Date and time library built in C++.
+###Jed C++ DateTime library is a simple Date and time library built in C++.
 
 ####Here's some examples
 
