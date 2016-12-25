@@ -4,12 +4,15 @@
 #include <ctime>
 #include <stdio.h>
 #include <string>
+#include <cstring>
 #include <stdlib.h>
 #include <stdexcept>
 #include <math.h>
 #include <iostream>
 
 using namespace std;
+
+enum weekday { sunday, monday, tuesday, wednesday, thursday, friday, saturday };
 
 class datetime
 {
@@ -32,6 +35,7 @@ class datetime
         int get_hour();
         int get_minute();
         int get_second();
+        weekday get_weekday();
         void add_years(int nb_years);
         void add_months(int nb_months);
         void add_days(int nb_days);
@@ -39,6 +43,7 @@ class datetime
         void add_minutes(int nb_minutes);
         void add_seconds(int nb_seconds);
         bool is_leapyear();
+        static datetime parse(string format, string value);
     protected:
         const time_t ONE_DAY = 86400; //24 hours * 60 mins * 60 secs
         const time_t ONE_HOUR = 3600; //60 mins * 60 secs
@@ -46,6 +51,7 @@ class datetime
         struct tm *timeInfo = nullptr;
         bool auto_created = true;
         bool _is_leapyear(int year);
+        static int _parse_intvalue(string pattern, int index, int mask_length, string parse_str);
         void _copy_from(const tm* otm);
 };
 

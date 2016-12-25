@@ -320,6 +320,77 @@ void test_operator_greater_equal()
     assert(!(dtTest >= dtTest2));
 }
 
+void test_get_weekday()
+{
+    datetime dtTest = datetime(2015, 02, 14, 11, 11, 11);
+    assert(dtTest.get_weekday() == weekday::saturday);
+
+    dtTest = datetime(2015, 02, 15);
+    assert(dtTest.get_weekday() == weekday::sunday);
+}
+
+void test_parse()
+{
+    datetime dtTest = datetime::parse(string("yyyy"), string("2016"));
+    assert(dtTest.get_year() == 2016);
+    assert(dtTest.get_month() == 1);
+    assert(dtTest.get_day() == 1);
+
+    dtTest = datetime::parse(string("yyyy-MM"), string("2016-04"));
+    assert(dtTest.get_year() == 2016);
+    assert(dtTest.get_month() == 4);
+    assert(dtTest.get_day() == 1);
+
+    dtTest = datetime::parse(string("yyyy/MM/dd"), string("2016-08-18"));
+    assert(dtTest.get_year() == 2016);
+    assert(dtTest.get_month() == 8);
+    assert(dtTest.get_day() == 18);
+
+    dtTest = datetime::parse(string("yyyy/MM/dd HH"), string("2016-08-18 23"));
+    assert(dtTest.get_year() == 2016);
+    assert(dtTest.get_month() == 8);
+    assert(dtTest.get_day() == 18);
+    assert(dtTest.get_hour() == 23);
+
+    dtTest = datetime::parse(string("yyyy/MM/dd HH:mm"), string("2016-08-18 23:14"));
+    assert(dtTest.get_year() == 2016);
+    assert(dtTest.get_month() == 8);
+    assert(dtTest.get_day() == 18);
+    assert(dtTest.get_hour() == 23);
+    assert(dtTest.get_minute() == 14);
+
+    dtTest = datetime::parse(string("yyyy/MM/dd HH:mm:ss"), string("2016-08-18 23:14:42"));
+    assert(dtTest.get_year() == 2016);
+    assert(dtTest.get_month() == 8);
+    assert(dtTest.get_day() == 18);
+    assert(dtTest.get_hour() == 23);
+    assert(dtTest.get_minute() == 14);
+    assert(dtTest.get_second() == 42);
+
+    try
+    {
+        dtTest = datetime::parse(string(""), string(""));
+        assert(false);
+
+    }
+    catch(invalid_argument& err)
+    {
+        assert(strcmp(err.what(), "format")==0);
+    }
+    catch(...) { assert(false); }
+
+    try
+    {
+        dtTest = datetime::parse(string("yyyy"), string("allo"));
+        assert(false);
+    }
+    catch(runtime_error& err)
+    {
+        assert(strcmp(err.what(), "Unable to parse the mask yyyy")==0);
+    }
+    catch(...) { assert(false); }
+}
+
 int main()
 {
     // Unit tests
@@ -337,22 +408,27 @@ int main()
     test_operator_less_equal();
     test_operator_greater();
     test_operator_greater_equal();
+    test_get_weekday();
+    test_parse();
 
-    datetime dtTest = datetime(2016,11,27,20,23,22);
+
+
+    /*datetime dtTest = datetime(2016,11,27,20,23,22);
     datetime dtTest2 = datetime();
     dtTest2.add_minutes(-30);
     dtTest.add_hours(1);
-    cout << dtTest.to_string() << endl;
-    cout << dtTest2.to_string() << endl;
-    cout << endl;
+    cout << dtTest << endl;*/
+    //cout << dtTest2.to_string() << endl;
+    //cout << endl;
 
-    if (dtTest >= dtTest2)
-        cout << "Plus grand" << endl;
+    //if (dtTest >= dtTest2)
+    //    cout << "Plus grand" << endl;
     /*datetime *dtTest2 = new datetime(1982,8,18);
     datetime dtTest3(*dtTest2);
     delete dtTest2;
     cout << dtTest3.to_shortdate_string() << endl;*/
-    cout << dtTest << endl;
+    //if (dtTest2.get_weekday() == sunday)
+    //    cout << dtTest2.get_weekday() << endl;
     //delete dtTest;
     //delete dtTest2;
 

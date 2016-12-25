@@ -37,6 +37,7 @@ datetime::datetime(int year, int month, int day, int hour, int minute, int secon
     timeInfo->tm_hour = hour;
     timeInfo->tm_min = minute;
     timeInfo->tm_sec = second;
+    timeInfo->tm_isdst = -1;
     mktime(timeInfo);
 }
 
@@ -120,6 +121,11 @@ int datetime::get_second()
     return timeInfo->tm_sec;
 }
 
+weekday datetime::get_weekday()
+{
+    return static_cast<weekday>(timeInfo->tm_wday);
+}
+
 void datetime::add_years(int nb_years)
 {
     timeInfo->tm_year += nb_years;
@@ -183,6 +189,74 @@ void datetime::_copy_from(const tm * otm)
     timeInfo->tm_isdst = otm->tm_isdst;
     timeInfo->tm_wday = otm->tm_wday;
     timeInfo->tm_yday = otm->tm_yday;
+}
+
+datetime datetime::parse(string format, string value)
+{
+    int year = 1970, month = 1, day = 1, hour = 0, minute = 0, second = 0;
+
+    if (strcmp(format.c_str(), "")==0)
+        throw invalid_argument("format");
+    string pattern_temp = "";
+    int pattern_firstindex = 0;
+    for (unsigned int index_char = 0; index_char<format.length(); index_char++)
+    {
+        //Check if the character is a valid pattern char
+        if ((format[index_char] >= 'a' && format[index_char] <= 'z') ||
+            (format[index_char] >= 'A' && format[index_char] <= 'Z'))
+        {
+            if (pattern_temp.length() == 0)
+            {
+
+                pattern_temp += format[index_char];
+                pattern_firstindex = index_char;
+            }
+            //Check if the pattern has not changed
+            else if (format[index_char] == pattern_temp[pattern_temp.length()-1])
+                pattern_temp += format[index_char];
+        }
+        //Check if the pattern has not changed
+        if (format[index_char] != pattern_temp[pattern_temp.length()-1] || index_char == format.length()-1)
+        {
+            if (pattern_firstindex + pattern_temp.length() <= value.length()) //Ensure that the value if long enough
+            {
+                int *ptr_date_section = nullptr;
+                if (pattern_temp == "yyyy")
+                    ptr_date_section = &year;
+                if (pattern_temp == "MM")
+                    ptr_date_section = &month;
+                if (pattern_temp == "dd")
+                    ptr_date_section = &day;
+                if (pattern_temp == "HH")
+                    ptr_date_section = &hour;
+                if (pattern_temp == "mm")
+                    ptr_date_section = &minute;
+                if (pattern_temp == "ss")
+                    ptr_date_section = &second;
+                if (ptr_date_section != nullptr)
+                    *ptr_date_section = _parse_intvalue(pattern_temp, pattern_firstindex, pattern_temp.length(), value);
+            }
+            pattern_temp = "";
+        }
+    }
+
+    return datetime(year, month, day, hour, minute, second);
+}
+
+int datetime::_parse_intvalue(string pattern, int index, int mask_length, string parse_str)
+{
+    long converted_value;
+    int ret_val;
+    char *end;
+    const char *parse_str_chr;
+
+    string value_parsed = parse_str.substr(index, mask_length);
+    parse_str_chr = value_parsed.c_str();
+    converted_value = strtol(parse_str_chr, &end, 10);
+    if (parse_str_chr == end)
+        throw runtime_error("Unable to parse the mask " + pattern);
+    ret_val = (int)converted_value;
+    return ret_val;
 }
 
 // Operators
