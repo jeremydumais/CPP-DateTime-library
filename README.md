@@ -94,7 +94,7 @@ datetime dtTest = datetime();
 cout << dtTest.to_string() << endl;
 ```
 
-#####Display the date in custom format ("yyyy-MM-dd HH:mm:ss")
+#####Display the date in custom format ("yyyy-MM-dd hh:mm:ss tt")
 
 ```c++
 datetime dtTest = datetime();
