@@ -2,7 +2,7 @@
 
 ###Jed C++ DateTime library is a simple Date and time library built in C++.
 
-####Methods available
+####Available methods
 ```c++
 string to_string();
 string to_shortdate_string();
@@ -22,6 +22,17 @@ void add_seconds(int nb_seconds);
 bool is_leapyear();
 static datetime parse(string format, string value);
 ```	
+
+####Supported operators
+
+| Operator | Quick description | Example |
+| --- | --- | --- |
+| = | Assignation operator | datetime dtTest = datetime(2016,11,27,20,23,22);<br>datetime dtTest2 = dtTest;<br>cout << dtTest2 << endl; |
+| <<  | Output stream operator | datetime dtTest = datetime();<br>cout << dtTest << endl; |
+| < | Less operator | datetime dtTest = datetime(2015, 02, 14, 14, 00, 00);<br>datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 01);<br>assert(dtTest < dtTest2); |
+| <= | Less equal operator | datetime dtTest = datetime(2015, 02, 14, 14, 00, 00);<br>datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 01);<br>assert(dtTest <= dtTest2); |
+| > | Greater operator | datetime dtTest = datetime(2015, 02, 14, 14, 00, 01);<br>datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 00);<br>assert(dtTest > dtTest2); |
+| >= | Greater equal operator | datetime dtTest = datetime(2015, 02, 14, 14, 00, 01);<br>datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 00);<br>assert(dtTest >= dtTest2); |
 	
 #### Custom Date and Time Format Strings
 
