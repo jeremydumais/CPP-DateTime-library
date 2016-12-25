@@ -2,6 +2,38 @@
 
 ###Jed C++ DateTime library is a simple Date and time library built in C++.
 
+####Methods available
+
+	string to_string();
+	string to_shortdate_string();
+	int get_year();
+	int get_month();
+	int get_day();
+	int get_hour();
+	int get_minute();
+	int get_second();
+	weekday get_weekday();
+	void add_years(int nb_years);
+	void add_months(int nb_months);
+	void add_days(int nb_days);
+	void add_hours(int nb_hours);
+	void add_minutes(int nb_minutes);
+	void add_seconds(int nb_seconds);
+	bool is_leapyear();
+	static datetime parse(string format, string value);
+	
+	
+#### Custom Date and Time Format Strings
+
+| Format specifier | Description |
+| --- | --- |
+| yyyy | The year as a four-digit number. |
+| MM | The month, from 01 through 12. |
+| dd | The day of the month, from 01 through 31. |
+| HH | The hour, using a 24-hour clock from 00 to 23. |
+| mm | The minute, from 00 through 59. |
+| ss | The second, from 00 through 59. |
+
 ####Here's some examples
 
 //Get the current date and time
@@ -40,25 +72,4 @@
 //Parse a string to a datetime
 
     datetime dtTest = datetime::parse(string("yyyy/MM/dd HH:mm:ss"), string("2016-08-18 23:14:42"));
-
-
-Methods available:
-
-	string to_string();
-	string to_shortdate_string();
-	int get_year();
-	int get_month();
-	int get_day();
-	int get_hour();
-	int get_minute();
-	int get_second();
-	weekday get_weekday();
-	void add_years(int nb_years);
-	void add_months(int nb_months);
-	void add_days(int nb_days);
-	void add_hours(int nb_hours);
-	void add_minutes(int nb_minutes);
-	void add_seconds(int nb_seconds);
-	bool is_leapyear();
-	static datetime parse(string format, string value);
 
