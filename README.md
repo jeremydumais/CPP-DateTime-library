@@ -20,7 +20,7 @@ void add_hours(int nb_hours);
 void add_minutes(int nb_minutes);
 void add_seconds(int nb_seconds);
 bool is_leapyear();
-static datetime parse(string format, string value);
+static datetime parse(string format, string value); //At this time only the following format specifiers are supported (yyyy, MM, dd, HH, mm and ss).
 ```	
 
 ####Supported operators
@@ -39,11 +39,19 @@ static datetime parse(string format, string value);
 | Format specifier | Description |
 | --- | --- |
 | yyyy | The year as a four-digit number. |
+| M | The month, from 1 through 12. |
 | MM | The month, from 01 through 12. |
+| d | The day of the month, from 1 through 31. |
 | dd | The day of the month, from 01 through 31. |
+| h | The hour, using a 12-hour clock from 1 to 12. |
+| hh | The hour, using a 12-hour clock from 01 to 12. |
+| H | The hour, using a 24-hour clock from 0 to 23. |
 | HH | The hour, using a 24-hour clock from 00 to 23. |
+| m | The minute, from 0 through 59. |
 | mm | The minute, from 00 through 59. |
+| s | The second, from 0 through 59. |
 | ss | The second, from 00 through 59. |
+| tt | The AM/PM designator. |
 
 ####Here's some examples
 

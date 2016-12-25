@@ -2,6 +2,7 @@
 #include <assert.h>
 #include "include/datetime.h"
 #include <cstring>
+#include <exception>
 
 using namespace std;
 
@@ -367,6 +368,14 @@ void test_parse()
     assert(dtTest.get_minute() == 14);
     assert(dtTest.get_second() == 42);
 
+    dtTest = datetime::parse(string("yyyyMMddHHmmss"), string("20160818231442"));
+    assert(dtTest.get_year() == 2016);
+    assert(dtTest.get_month() == 8);
+    assert(dtTest.get_day() == 18);
+    assert(dtTest.get_hour() == 23);
+    assert(dtTest.get_minute() == 14);
+    assert(dtTest.get_second() == 42);
+
     try
     {
         dtTest = datetime::parse(string(""), string(""));
@@ -391,6 +400,51 @@ void test_parse()
     catch(...) { assert(false); }
 }
 
+void test_tostring_format()
+{
+    try
+    {
+        datetime dtTest = datetime();
+        dtTest.to_string("");
+        assert(false);
+    }
+    catch(invalid_argument& err)
+    {
+        assert(strcmp(err.what(), "format")==0);
+    }
+    catch(...) { assert(false); }
+
+    datetime dtTest = datetime(2015, 10, 14, 15, 12, 13);
+    assert(dtTest.to_string("/02-yyyy/MM-dd") == "/02-2015/10-14");
+    assert(dtTest.to_string("yyyy-MM-dd") == "2015-10-14");
+    assert(dtTest.to_string("yyyy-M-d") == "2015-10-14");
+    assert(dtTest.to_string("yyyy MM dd") == "2015 10 14");
+    assert(dtTest.to_string("dd/MM/yyyy") == "14/10/2015");
+    assert(dtTest.to_string("yyyy") == "2015");
+    assert(dtTest.to_string("MM") == "10");
+    assert(dtTest.to_string("dd") == "14");
+    assert(dtTest.to_string("yyyy-MM-dd HH:mm:ss") == "2015-10-14 15:12:13");
+    assert(dtTest.to_string("yyyy-MM-dd hh:mm:ss tt") == "2015-10-14 03:12:13 PM");
+    assert(dtTest.to_string("yyyy-MM-dd h:mm:ss tt") == "2015-10-14 3:12:13 PM");
+    assert(dtTest.to_string("yyyy-MM-dd H:m:s") == "2015-10-14 15:12:13");
+    assert(dtTest.to_string("HH:mm:ss") == "15:12:13");
+    assert(dtTest.to_string("aaaa") == ""); //Invalid format
+    assert(dtTest.to_string("aaaa-ii") == "-"); //Invalid format
+    assert(dtTest.to_string("yyyy-MM-dd HH:mm:ss tt") == "2015-10-14 15:12:13 PM");
+
+    dtTest = datetime(2015, 2, 5, 1, 2, 3);
+    assert(dtTest.to_string("yyyy-M-d") == "2015-2-5");
+    assert(dtTest.to_string("yyyy-MM-dd") == "2015-02-05");
+    assert(dtTest.to_string("yyyy-MM-dd H:m:s") == "2015-02-05 1:2:3");
+    assert(dtTest.to_string("yyyy-MM-dd HH:mm:ss tt") == "2015-02-05 01:02:03 AM");
+    assert(dtTest.to_string("yyyy-MM-dd hh:mm:ss tt") == "2015-02-05 01:02:03 AM");
+    assert(dtTest.to_string("yyyy-MM-dd h:mm:ss tt") == "2015-02-05 1:02:03 AM");
+
+    dtTest = datetime(2015, 2, 5, 0, 0, 0);
+    assert(dtTest.to_string("yyyy-MM-dd hh:mm:ss tt") == "2015-02-05 12:00:00 AM");
+    assert(dtTest.to_string("yyyy-MM-dd h:mm:ss tt") == "2015-02-05 12:00:00 AM");
+}
+
 int main()
 {
     // Unit tests
@@ -410,28 +464,11 @@ int main()
     test_operator_greater_equal();
     test_get_weekday();
     test_parse();
+    test_tostring_format();
 
 
-
-    /*datetime dtTest = datetime(2016,11,27,20,23,22);
-    datetime dtTest2 = datetime();
-    dtTest2.add_minutes(-30);
-    dtTest.add_hours(1);
-    cout << dtTest << endl;*/
-    //cout << dtTest2.to_string() << endl;
-    //cout << endl;
-
-    //if (dtTest >= dtTest2)
-    //    cout << "Plus grand" << endl;
-    /*datetime *dtTest2 = new datetime(1982,8,18);
-    datetime dtTest3(*dtTest2);
-    delete dtTest2;
-    cout << dtTest3.to_shortdate_string() << endl;*/
-    //if (dtTest2.get_weekday() == sunday)
-    //    cout << dtTest2.get_weekday() << endl;
-    //delete dtTest;
-    //delete dtTest2;
-
+    /*datetime dtTest = datetime(2016,11,27,3,23,22);
+    cout << dtTest.to_string("yyyy-MM-dd H:mm");*/
 
     return 0;
 }

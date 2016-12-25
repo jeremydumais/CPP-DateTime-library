@@ -81,6 +81,142 @@ string datetime::to_string()
 
 }
 
+string datetime::to_string(string format)
+{
+    string retVal = "";
+
+    if (strcmp(format.c_str(), "")==0)
+        throw invalid_argument("format");
+    string pattern_temp = "";
+    for (unsigned int index_char = 0; index_char<format.length(); index_char++)
+    {
+        bool is_letter = false;
+        //Check if the character is a valid pattern char
+        if ((format[index_char] >= 'a' && format[index_char] <= 'z') ||
+            (format[index_char] >= 'A' && format[index_char] <= 'Z'))
+        {
+            is_letter = true;
+            if (pattern_temp.length() == 0)
+            {
+
+                pattern_temp += format[index_char];
+            }
+            //Check if the pattern has not changed
+            else if (format[index_char] == pattern_temp[pattern_temp.length()-1])
+                pattern_temp += format[index_char];
+        }
+        //Check if the pattern has not changed
+        if (format[index_char] != pattern_temp[pattern_temp.length()-1] || index_char == format.length()-1)
+        {
+            //int *ptr_date_section = nullptr;
+            char value_converted[5] = "";
+            if (pattern_temp == "yyyy")
+            {
+                sprintf(value_converted, "%04d",this->get_year());
+                retVal += value_converted;
+            }
+            else if (pattern_temp == "MM")
+            {
+                sprintf(value_converted, "%02d",this->get_month());
+                retVal += value_converted;
+            }
+            else if (pattern_temp == "M")
+            {
+                sprintf(value_converted, "%01d",this->get_month());
+                retVal += value_converted;
+            }
+            else if (pattern_temp == "dd")
+            {
+                sprintf(value_converted, "%02d",this->get_day());
+                retVal += value_converted;
+            }
+            else if (pattern_temp == "d")
+            {
+                sprintf(value_converted, "%01d",this->get_day());
+                retVal += value_converted;
+            }
+            else if (pattern_temp == "HH")
+            {
+                sprintf(value_converted, "%02d",this->get_hour());
+                retVal += value_converted;
+            }
+            else if (pattern_temp == "H")
+            {
+                sprintf(value_converted, "%01d",this->get_hour());
+                retVal += value_converted;
+            }
+            else if (pattern_temp == "hh")
+            {
+                int instance_hour = this->get_hour();
+                if  (instance_hour == 0)
+                    retVal += "12";
+                else if (instance_hour > 12)
+                {
+                    sprintf(value_converted, "%02d",instance_hour - 12);
+                    retVal += value_converted;
+                }
+                else
+                {
+                    sprintf(value_converted, "%02d",instance_hour);
+                    retVal += value_converted;
+                }
+            }
+            else if (pattern_temp == "h")
+            {
+                int instance_hour = this->get_hour();
+                if  (instance_hour == 0)
+                    retVal += "12";
+                else if (instance_hour > 12)
+                {
+                    sprintf(value_converted, "%01d",instance_hour - 12);
+                    retVal += value_converted;
+                }
+                else
+                {
+                    sprintf(value_converted, "%01d",instance_hour);
+                    retVal += value_converted;
+                }
+            }
+            else if (pattern_temp == "mm")
+            {
+                sprintf(value_converted, "%02d",this->get_minute());
+                retVal += value_converted;
+            }
+            else if (pattern_temp == "m")
+            {
+                sprintf(value_converted, "%01d",this->get_minute());
+                retVal += value_converted;
+            }
+            else if (pattern_temp == "ss")
+            {
+                sprintf(value_converted, "%02d",this->get_second());
+                retVal += value_converted;
+            }
+            else if (pattern_temp == "s")
+            {
+                sprintf(value_converted, "%01d",this->get_second());
+                retVal += value_converted;
+            }
+            else if (pattern_temp == "tt")
+            {
+                if (this->get_hour() >= 12)
+                    retVal += "PM";
+                else
+                    retVal += "AM";
+            }
+
+            pattern_temp = "";
+        }
+
+        if (!is_letter)
+            retVal += format[index_char];
+        else if (pattern_temp.length() == 0)
+            pattern_temp += format[index_char];
+    }
+    return string(retVal);
+
+}
+
 string datetime::to_shortdate_string()
 {
     char retVal[128] = "";
@@ -197,14 +333,17 @@ datetime datetime::parse(string format, string value)
 
     if (strcmp(format.c_str(), "")==0)
         throw invalid_argument("format");
+
     string pattern_temp = "";
     int pattern_firstindex = 0;
+    bool is_letter = false;
     for (unsigned int index_char = 0; index_char<format.length(); index_char++)
     {
         //Check if the character is a valid pattern char
         if ((format[index_char] >= 'a' && format[index_char] <= 'z') ||
             (format[index_char] >= 'A' && format[index_char] <= 'Z'))
         {
+            is_letter = true;
             if (pattern_temp.length() == 0)
             {
 
@@ -237,6 +376,12 @@ datetime datetime::parse(string format, string value)
                     *ptr_date_section = _parse_intvalue(pattern_temp, pattern_firstindex, pattern_temp.length(), value);
             }
             pattern_temp = "";
+        }
+
+        if (is_letter && pattern_temp.length() == 0)
+        {
+            pattern_temp += format[index_char];
+            pattern_firstindex = index_char;
         }
     }
 

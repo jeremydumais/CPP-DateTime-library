@@ -28,6 +28,7 @@ class datetime
         friend bool operator>=(const datetime& mdt, const datetime& odt);
         virtual ~datetime();
         string to_string();
+        string to_string(string format);
         string to_shortdate_string();
         int get_year();
         int get_month();
