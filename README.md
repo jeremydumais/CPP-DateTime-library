@@ -55,46 +55,53 @@ static datetime parse(string format, string value); //At this time only the foll
 
 ####Here's some examples
 
-//Get the current date and time
+#####Get the current date and time
 
 ```c++
 datetime dtTest = datetime();
 ```
 
-//Create a known date
+#####Create a known date
 
 ```c++
 datetime dtTest = datetime(2016, 11, 25);
 ```
 
-//Create a known date with time (year, month, day, hour, minute, second)
+#####Create a known date with time (year, month, day, hour, minute, second)
 
 ```c++
 datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
 ```
 
-//Add a week to a date
+#####Add a week to a date
 
 ```c++
 datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
 dtTest.add_days(7);
 ```
 
-//Substract a week from a date
+#####Substract a week from a date
 
 ```c++
 datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
 dtTest.add_days(-7);
 ```
 
-//Display the date in standard form (yyyy-MM-dd HH:mm:ss)
+#####Display the date in standard form (yyyy-MM-dd HH:mm:ss)
 
 ```c++
 datetime dtTest = datetime();
 cout << dtTest.to_string() << endl;
 ```
 
-//Get weekday of a datetime
+#####Display the date in custom format ("yyyy-MM-dd HH:mm:ss")
+
+```c++
+datetime dtTest = datetime();
+cout << dtTest.to_string("yyyy-MM-dd hh:mm:ss tt") << endl;
+```
+
+#####Get weekday of a datetime
 
 ```c++
 //enum weekday { sunday, monday, tuesday, wednesday, thursday, friday, saturday };
@@ -102,7 +109,7 @@ datetime dtTest = datetime(2015, 02, 14, 11, 11, 11);
 assert(dtTest.get_weekday() == weekday::saturday);
 ```
 
-//Parse a string to a datetime
+#####Parse a string to a datetime
 
 ```c++
 datetime dtTest = datetime::parse(string("yyyy/MM/dd HH:mm:ss"), string("2016-08-18 23:14:42"));
