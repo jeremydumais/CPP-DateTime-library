@@ -3,6 +3,7 @@
 #include "include/datetime.h"
 #include <cstring>
 #include <exception>
+#include <conio.h>
 
 using namespace std;
 
@@ -466,9 +467,11 @@ int main()
     test_parse();
     test_tostring_format();
 
+	cout << "Unit tests successful!";
 
     /*datetime dtTest = datetime(2016,11,27,3,23,22);
     cout << dtTest.to_string("yyyy-MM-dd H:mm");*/
 
-    return 0;
+	getch();
+	return 0;
 }

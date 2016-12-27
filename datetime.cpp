@@ -16,7 +16,7 @@ datetime::datetime(int year, int month, int day, int hour, int minute, int secon
         throw invalid_argument("month must be between 1 and 12");
     if (day < 1)
         throw invalid_argument("day is out of range");
-    if ((month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 or month == 12) && day > 31)
+    if ((month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) && day > 31)
         throw invalid_argument("day is out of range");
     else if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30)
         throw invalid_argument("day is out of range");
@@ -106,7 +106,7 @@ string datetime::to_string(string format)
                 pattern_temp += format[index_char];
         }
         //Check if the pattern has not changed
-        if (format[index_char] != pattern_temp[pattern_temp.length()-1] || index_char == format.length()-1)
+        if (pattern_temp.length() > 0 && (format[index_char] != pattern_temp[pattern_temp.length()-1] || index_char == format.length()-1))
         {
             //int *ptr_date_section = nullptr;
             char value_converted[5] = "";
