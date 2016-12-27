@@ -20,7 +20,9 @@ void add_hours(int nb_hours);
 void add_minutes(int nb_minutes);
 void add_seconds(int nb_seconds);
 bool is_leapyear();
-static datetime parse(string format, string value); //At this time only the following format specifiers are supported (yyyy, MM, dd, HH, mm and ss).
+static datetime parse(string format, string value); 
+//NB: At this time only the following format specifiers (yyyy, MM, dd, HH, mm and ss) 
+//    are supported by the parse method.
 ```	
 
 ####Supported operators
