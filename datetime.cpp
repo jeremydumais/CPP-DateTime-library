@@ -3,10 +3,18 @@
 //Default constructor get current date and time
 datetime::datetime()
 {
-    time_t now = time(0);
-    tm* tm_now = localtime(&now);
-    timeInfo = new tm();
-    _copy_from(tm_now);
+	__time64_t long_time;
+	tm tm_now;
+	errno_t err;
+
+	// Get time as 64-bit integer.  
+	_time64(&long_time);
+	err = localtime_s(&tm_now, &long_time);
+	if (err == 0)
+	{
+		timeInfo = new tm();
+		_copy_from(&tm_now);
+	}
 }
 
 datetime::datetime(int year, int month, int day, int hour, int minute, int second)
@@ -41,6 +49,7 @@ datetime::datetime(int year, int month, int day, int hour, int minute, int secon
     mktime(timeInfo);
 }
 
+//Copy constructor
 datetime::datetime(const datetime &other)
 {
     timeInfo = new tm();
@@ -59,7 +68,7 @@ datetime::~datetime()
     delete timeInfo;
 }
 
-bool datetime::_is_leapyear(int year)
+bool datetime::_is_leapyear(int year) const
 {
     if ((year % 4 == 0 && year % 100 != 0) || ( year % 400 == 0))
         return true;
@@ -67,10 +76,10 @@ bool datetime::_is_leapyear(int year)
         return false;
 }
 
-string datetime::to_string()
+string datetime::to_string() const
 {
     char retVal[128] = "";
-    sprintf(retVal, "%d-%02d-%02d %02d:%02d:%02d",
+    sprintf_s(retVal, "%d-%02d-%02d %02d:%02d:%02d",
             get_year(),
             get_month(),
             get_day(),
@@ -81,7 +90,7 @@ string datetime::to_string()
 
 }
 
-string datetime::to_string(string format)
+string datetime::to_string(string format) const
 {
     string retVal = "";
 
@@ -112,37 +121,37 @@ string datetime::to_string(string format)
             char value_converted[5] = "";
             if (pattern_temp == "yyyy")
             {
-                sprintf(value_converted, "%04d",this->get_year());
+                sprintf_s(value_converted, "%04d",this->get_year());
                 retVal += value_converted;
             }
             else if (pattern_temp == "MM")
             {
-                sprintf(value_converted, "%02d",this->get_month());
+                sprintf_s(value_converted, "%02d",this->get_month());
                 retVal += value_converted;
             }
             else if (pattern_temp == "M")
             {
-                sprintf(value_converted, "%01d",this->get_month());
+                sprintf_s(value_converted, "%01d",this->get_month());
                 retVal += value_converted;
             }
             else if (pattern_temp == "dd")
             {
-                sprintf(value_converted, "%02d",this->get_day());
+                sprintf_s(value_converted, "%02d",this->get_day());
                 retVal += value_converted;
             }
             else if (pattern_temp == "d")
             {
-                sprintf(value_converted, "%01d",this->get_day());
+                sprintf_s(value_converted, "%01d",this->get_day());
                 retVal += value_converted;
             }
             else if (pattern_temp == "HH")
             {
-                sprintf(value_converted, "%02d",this->get_hour());
+                sprintf_s(value_converted, "%02d",this->get_hour());
                 retVal += value_converted;
             }
             else if (pattern_temp == "H")
             {
-                sprintf(value_converted, "%01d",this->get_hour());
+                sprintf_s(value_converted, "%01d",this->get_hour());
                 retVal += value_converted;
             }
             else if (pattern_temp == "hh")
@@ -152,12 +161,12 @@ string datetime::to_string(string format)
                     retVal += "12";
                 else if (instance_hour > 12)
                 {
-                    sprintf(value_converted, "%02d",instance_hour - 12);
+                    sprintf_s(value_converted, "%02d",instance_hour - 12);
                     retVal += value_converted;
                 }
                 else
                 {
-                    sprintf(value_converted, "%02d",instance_hour);
+                    sprintf_s(value_converted, "%02d",instance_hour);
                     retVal += value_converted;
                 }
             }
@@ -168,33 +177,33 @@ string datetime::to_string(string format)
                     retVal += "12";
                 else if (instance_hour > 12)
                 {
-                    sprintf(value_converted, "%01d",instance_hour - 12);
+                    sprintf_s(value_converted, "%01d",instance_hour - 12);
                     retVal += value_converted;
                 }
                 else
                 {
-                    sprintf(value_converted, "%01d",instance_hour);
+                    sprintf_s(value_converted, "%01d",instance_hour);
                     retVal += value_converted;
                 }
             }
             else if (pattern_temp == "mm")
             {
-                sprintf(value_converted, "%02d",this->get_minute());
+                sprintf_s(value_converted, "%02d",this->get_minute());
                 retVal += value_converted;
             }
             else if (pattern_temp == "m")
             {
-                sprintf(value_converted, "%01d",this->get_minute());
+                sprintf_s(value_converted, "%01d",this->get_minute());
                 retVal += value_converted;
             }
             else if (pattern_temp == "ss")
             {
-                sprintf(value_converted, "%02d",this->get_second());
+                sprintf_s(value_converted, "%02d",this->get_second());
                 retVal += value_converted;
             }
             else if (pattern_temp == "s")
             {
-                sprintf(value_converted, "%01d",this->get_second());
+                sprintf_s(value_converted, "%01d",this->get_second());
                 retVal += value_converted;
             }
             else if (pattern_temp == "tt")
@@ -217,47 +226,47 @@ string datetime::to_string(string format)
 
 }
 
-string datetime::to_shortdate_string()
+string datetime::to_shortdate_string() const
 {
     char retVal[128] = "";
-    sprintf(retVal, "%d-%02d-%02d",
+    sprintf_s(retVal, "%d-%02d-%02d",
             get_year(),
             get_month(),
             get_day());
     return string(retVal);
 }
 
-int datetime::get_year()
+int datetime::get_year() const
 {
     return timeInfo->tm_year + 1900;
 }
 
-int datetime::get_month()
+int datetime::get_month() const
 {
     return timeInfo->tm_mon+1;
 }
 
-int datetime::get_day()
+int datetime::get_day() const
 {
     return timeInfo->tm_mday;
 }
 
-int datetime::get_hour()
+int datetime::get_hour() const
 {
     return timeInfo->tm_hour;
 }
 
-int datetime::get_minute()
+int datetime::get_minute() const
 {
     return timeInfo->tm_min;
 }
 
-int datetime::get_second()
+int datetime::get_second() const
 {
     return timeInfo->tm_sec;
 }
 
-weekday datetime::get_weekday()
+weekday datetime::get_weekday() const
 {
     return static_cast<weekday>(timeInfo->tm_wday);
 }
@@ -270,7 +279,7 @@ void datetime::add_years(int nb_years)
 void datetime::add_months(int nb_months)
 {
     //Get number of year
-    int nb_year = ceil(nb_months / 12);
+    int nb_year = (int)ceil(nb_months / 12);
     int nb_months_final = nb_months % 12;
 
     if (timeInfo->tm_mon + nb_months_final > 11)  // tm_mon is from 0 to 11
@@ -302,11 +311,15 @@ void datetime::add_minutes(int nb_minutes)
 
 void datetime::add_seconds(int nb_seconds)
 {
+	tm tm_new_time;
+	errno_t err;
     time_t new_seconds = mktime(timeInfo) + nb_seconds;
     delete timeInfo;
-    tm* tm_new_time = localtime(&new_seconds);
+
+	err = localtime_s(&tm_new_time, &new_seconds);
+
     timeInfo = new tm();
-    _copy_from(tm_new_time);
+    _copy_from(&tm_new_time);
 }
 
 bool datetime::is_leapyear()
@@ -405,10 +418,10 @@ int datetime::_parse_intvalue(string pattern, int index, int mask_length, string
 }
 
 // Operators
-std::ostream& operator<<(std::ostream& os, const datetime& dt)
+std::ostream& operator<<(std::ostream &os, const datetime &dt)
 {
     char retVal[128] = "";
-    sprintf(retVal, "%d-%02d-%02d %02d:%02d:%02d",
+    sprintf_s(retVal, "%d-%02d-%02d %02d:%02d:%02d",
             dt.timeInfo->tm_year + 1900,
             dt.timeInfo->tm_mon + 1,
             dt.timeInfo->tm_mday,
@@ -420,22 +433,68 @@ std::ostream& operator<<(std::ostream& os, const datetime& dt)
     return os;
 }
 
-bool operator<(const datetime& mdt, const datetime& odt)
+bool operator<(const datetime &mdt, const datetime &odt)
 {
     return mktime(mdt.timeInfo) < mktime(odt.timeInfo);
 }
 
-bool operator>(const datetime& mdt, const datetime& odt)
+bool operator>(const datetime &mdt, const datetime &odt)
 {
     return mktime(odt.timeInfo) < mktime(mdt.timeInfo);
 }
 
-bool operator<=(const datetime& mdt, const datetime& odt)
+bool operator<=(const datetime &mdt, const datetime &odt)
 {
     return !(mktime(mdt.timeInfo) > mktime(odt.timeInfo));
 }
 
-bool operator>=(const datetime& mdt, const datetime& odt)
+bool operator>=(const datetime &mdt, const datetime &odt)
 {
     return !(mktime(mdt.timeInfo) < mktime(odt.timeInfo));
+}
+
+timespan operator-(const datetime &mdt, const datetime &odt)
+{
+	int days = 0, hours = 0, minutes = 0, seconds = 0;
+
+	//Transfer both dates in a number of days
+	time_t time_mdt = mktime(mdt.timeInfo);
+	time_t time_odt = mktime(odt.timeInfo);
+	double difference = difftime(time_mdt, time_odt) / (60 * 60 * 24);
+	days = (int)difference;
+
+	if (mdt >= odt)
+	{
+		hours = mdt.get_hour() - odt.get_hour();
+		seconds = mdt.get_second() - odt.get_second();
+		minutes = mdt.get_minute() - odt.get_minute();
+	}
+	else
+	{
+		if (mdt.get_second() > odt.get_second())
+		{
+			seconds = mdt.get_second() - odt.get_second() - 60;
+			minutes += 1;
+		}
+		else
+			seconds = mdt.get_second() - odt.get_second();
+
+		if (mdt.get_minute() > odt.get_minute())
+		{
+			minutes += mdt.get_minute() - odt.get_minute() - 60;
+			hours += 1;
+		}
+		else
+			minutes += mdt.get_minute() - odt.get_minute();
+		
+		if (mdt.get_hour() > odt.get_hour())
+		{
+			hours += mdt.get_hour() - odt.get_hour() - 24;
+		}
+		else
+			hours += mdt.get_hour() - odt.get_hour();
+	}
+	
+	timespan retVal(days, hours, minutes, seconds);
+	return retVal;
 }

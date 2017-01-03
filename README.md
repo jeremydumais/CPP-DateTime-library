@@ -1,6 +1,8 @@
 #Jed# C++ DateTime Library
 
-###Jed# C++ DateTime library is a simple Date and time library built in C++.
+##Jed# C++ DateTime library is a simple Date and time library built in C++.
+
+###datetime class
 
 ####Available methods
 ```c++
@@ -35,6 +37,7 @@ static datetime parse(string format, string value);
 | <= | Less equal operator | datetime dtTest = datetime(2015, 02, 14, 14, 00, 00);<br>datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 01);<br>assert(dtTest <= dtTest2); |
 | > | Greater operator | datetime dtTest = datetime(2015, 02, 14, 14, 00, 01);<br>datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 00);<br>assert(dtTest > dtTest2); |
 | >= | Greater equal operator | datetime dtTest = datetime(2015, 02, 14, 14, 00, 01);<br>datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 00);<br>assert(dtTest >= dtTest2); |
+| - | Minus operator | datetime dtTest = datetime(2015, 02, 11, 13, 00, 00);<br>datetime dtTest2 = datetime(2015, 02, 14, 15, 00, 00);<br>timespan tsTest = dtTest2 - dtTest;<br>assert(tsTest.get_days() == 3);<br>assert(tsTest.get_hours() == 2); |
 	
 #### Custom Date and Time Format Strings
 
@@ -55,7 +58,22 @@ static datetime parse(string format, string value);
 | ss | The second, from 00 through 59. |
 | tt | The AM/PM designator. |
 
-####Here's some examples
+
+###timespan class
+
+####Available methods
+```c++
+int get_days();
+int get_hours();
+int get_minutes();
+int get_seconds();
+int get_total_hours();
+int get_total_minutes();
+int get_total_seconds();
+```	
+
+
+###Here's some examples
 
 #####Get the current date and time
 
@@ -115,4 +133,35 @@ assert(dtTest.get_weekday() == weekday::saturday);
 
 ```c++
 datetime dtTest = datetime::parse(string("yyyy/MM/dd HH:mm:ss"), string("2016-08-18 23:14:42"));
+```
+
+#####Substracting two datetime objetcs (Example 1)
+
+```c++
+datetime date1(2016, 12, 31, 11, 32, 5);
+datetime date2(2016, 12, 25, 13, 55, 12);
+timespan ts1 = date2 - date1;
+assert(ts1.get_days() == -5);
+assert(ts1.get_hours() == -21);
+assert(ts1.get_minutes() == -36);
+assert(ts1.get_seconds() == -53);
+```
+
+#####Substracting two datetime objetcs (Example 2)
+
+```c++
+datetime date1(2016, 11, 25);
+datetime date2(2016, 12, 5);
+timespan ts1 = date2 - date1;
+assert(ts1.get_days() == 10);
+assert(ts1.get_hours() == 0);
+assert(ts1.get_minutes() == 0);
+assert(ts1.get_seconds() == 0);
+```
+
+#####Get total minutes of a timespan
+
+```c++
+timespan ts(0, 1, 3, 15);
+assert(ts.get_total_minutes() == 63);
 ```
