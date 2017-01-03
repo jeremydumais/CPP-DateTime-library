@@ -4,6 +4,12 @@
 
 ###datetime class
 
+####Constructors
+```c++
+datetime(); // Get the current date and time
+datetime(int year, int month, int day, int hour = 0, int minute = 0, int second = 0);
+```
+
 ####Available methods
 ```c++
 string to_string();
@@ -60,6 +66,11 @@ static datetime parse(string format, string value);
 
 
 ###timespan class
+
+####Constructor
+```c++
+timespan(int days, int hours=0, int minutes=0, int seconds=0);
+```
 
 ####Available methods
 ```c++
