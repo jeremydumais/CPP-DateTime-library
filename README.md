@@ -37,12 +37,13 @@ static datetime parse(string format, string value);
 
 | Operator | Quick description | Example |
 | --- | --- | --- |
-| = | Assignation operator | datetime dtTest = datetime(2016,11,27,20,23,22);<br>datetime dtTest2 = dtTest;<br>cout << dtTest2 << endl; |
 | <<  | Output stream operator | datetime dtTest = datetime();<br>cout << dtTest << endl; |
 | < | Less operator | datetime dtTest = datetime(2015, 02, 14, 14, 00, 00);<br>datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 01);<br>assert(dtTest < dtTest2); |
 | <= | Less equal operator | datetime dtTest = datetime(2015, 02, 14, 14, 00, 00);<br>datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 01);<br>assert(dtTest <= dtTest2); |
 | > | Greater operator | datetime dtTest = datetime(2015, 02, 14, 14, 00, 01);<br>datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 00);<br>assert(dtTest > dtTest2); |
 | >= | Greater equal operator | datetime dtTest = datetime(2015, 02, 14, 14, 00, 01);<br>datetime dtTest2 = datetime(2015, 02, 14, 14, 00, 00);<br>assert(dtTest >= dtTest2); |
+| == | Equality operator | assert(datetime(2017, 1, 8, 15, 28, 23) == datetime(2017, 1, 8, 15, 28, 23)); |
+| != | Inequality operator | assert(datetime(2017, 1, 8, 15, 28, 23) != datetime(2017, 1, 8, 15, 28, 22)); |
 | - | Minus operator | datetime dtTest = datetime(2015, 02, 11, 13, 00, 00);<br>datetime dtTest2 = datetime(2015, 02, 14, 15, 00, 00);<br>timespan tsTest = dtTest2 - dtTest;<br>assert(tsTest.get_days() == 3);<br>assert(tsTest.get_hours() == 2); |
 	
 #### Custom Date and Time Format Strings
@@ -82,6 +83,17 @@ int get_total_hours();
 int get_total_minutes();
 int get_total_seconds();
 ```	
+
+####Supported operators
+
+| Operator | Quick description | Example |
+| --- | --- | --- |
+| < | Less operator | timespan ts1(3, 2, 1, 0);<br>timespan ts2(3, 2, 0, 0);<br>assert(ts2 < ts1); |
+| <= | Less equal operator | assert(ts2 <= ts1);<br>ts1 = timespan(4, 3, 2, 1);<br>ts2 = timespan(4, 3, 2, 1); |
+| > | Greater operator | timespan ts1(3, 2, 1, 0);<br>timespan ts2(3, 2, 0, 0);<br>assert(ts1 > ts2); |
+| >= | Greater equal operator | ts1 = timespan(4, 3, 2, 1);<br>ts2 = timespan(4, 3, 2, 1);<br>assert(ts2 >= ts1); |
+| == | Equality operator | assert(timespan(1, 2, 3, 4) == timespan(1, 2, 3, 4)); |
+| != | Inequality operator | assert(timespan(1, 2, 3, 4) != timespan(1, 2, 3, 3)); |
 
 
 ###Here's some examples

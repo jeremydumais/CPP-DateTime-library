@@ -144,6 +144,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="datetime_unittest.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="timespan_unittest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\datetime.vcxproj">

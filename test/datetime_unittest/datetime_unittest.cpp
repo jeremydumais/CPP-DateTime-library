@@ -5,7 +5,6 @@
 #include <assert.h>
 #include <cstring>
 #include <exception>
-#include <conio.h>
 
 using namespace std;
 
@@ -29,7 +28,7 @@ void test_constructor()
 	assert(dtTest->get_second() == 11);
 	delete dtTest;
 	// Invalid month (under)
-	try { datetime dtTestExept (2015, 00, 14); }
+	try { datetime dtTestExept(2015, 00, 14); }
 	catch (const std::invalid_argument &e) {
 		assert(strcmp(e.what(), "month must be between 1 and 12") == 0);
 	}
@@ -324,6 +323,24 @@ void test_operator_greater_equal()
 	assert(!(dtTest >= dtTest2));
 }
 
+void test_operator_equal()
+{
+	assert(datetime(2017, 1, 8, 15, 28, 23) == datetime(2017, 1, 8, 15, 28, 23));
+	assert(datetime(2016, 12, 31, 23, 59, 59) == datetime(2016, 12, 31, 23, 59, 59));
+}
+
+void test_operator_not_equal()
+{
+	assert(!(datetime(2017, 1, 8, 15, 28, 23) != datetime(2017, 1, 8, 15, 28, 23)));
+	assert(!(datetime(2016, 12, 31, 23, 59, 59) != datetime(2016, 12, 31, 23, 59, 59)));
+	assert(datetime(2017, 1, 8, 15, 28, 23) != datetime(2017, 1, 8, 15, 28, 22));
+	assert(datetime(2017, 1, 8, 15, 28, 23) != datetime(2017, 1, 8, 15, 27, 23));
+	assert(datetime(2017, 1, 8, 15, 28, 23) != datetime(2017, 1, 8, 14, 28, 23));
+	assert(datetime(2017, 1, 8, 15, 28, 23) != datetime(2017, 1, 7, 15, 28, 23));
+	assert(datetime(2017, 1, 8, 15, 28, 23) != datetime(2017, 2, 8, 15, 28, 23));
+	assert(datetime(2017, 1, 8, 15, 28, 23) != datetime(2016, 1, 8, 15, 28, 23));
+}
+
 void test_get_weekday()
 {
 	datetime dtTest = datetime(2015, 02, 14, 11, 11, 11);
@@ -510,107 +527,8 @@ void test_operator_minus()
 	assert(ts1.get_seconds() == 7);
 }
 
-void test_timespan_constructor()
+void datetime_unittest()
 {
-	// Invalid hour (under)
-	try { timespan tsTest(0, -24, 0, 0); }
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "hours must be between 0 and 23") == 0);
-	}
-	// Invalid hour (over)
-	try { timespan tsTest(0, 24, 0, 0); }
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "hours must be between 0 and 23") == 0);
-	}
-	// Invalid minute (under)
-	try { timespan tsTest(0, 0, -60, 0); }
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "minutes must be between 0 and 59") == 0);
-	}
-	// Invalid minute (over)
-	try { timespan tsTest(0, 0, 60, 0); }
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "minutes must be between 0 and 59") == 0);
-	}
-	// Invalid second (under)
-	try { timespan tsTest(0, 0, 0, -60); }
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "seconds must be between 0 and 59") == 0);
-	}
-	// Invalid second (over)
-	try { timespan tsTest(0, 0, 0, 60); }
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "seconds must be between 0 and 59") == 0);
-	}
-}
-
-void test_timespan_get_total_seconds()
-{
-	timespan ts(0, 0, 0, 15);
-	assert(ts.get_total_seconds() == 15);
-	ts = timespan(0, 0, 3, 15);
-	assert(ts.get_total_seconds() == 195);
-	ts = timespan(0, 1, 3, 15);
-	assert(ts.get_total_seconds() == 3795);
-	ts = timespan(1, 1, 3, 15);
-	assert(ts.get_total_seconds() == 90195);
-	//Negative values
-	ts = timespan(0, 0, 0, -15);
-	assert(ts.get_total_seconds() == -15);
-	ts = timespan(0, 0, -3, -15);
-	assert(ts.get_total_seconds() == -195);
-	ts = timespan(0, -1, -3, -15);
-	assert(ts.get_total_seconds() == -3795);
-	ts = timespan(-1, -1, -3, -15);
-	assert(ts.get_total_seconds() == -90195);
-
-}
-
-void test_timespan_get_total_minutes()
-{
-	timespan ts(0, 0, 0, 15);
-	assert(ts.get_total_minutes() == 0);
-	ts = timespan(0, 0, 3, 15);
-	assert(ts.get_total_minutes() == 3);
-	ts = timespan(0, 1, 3, 15);
-	assert(ts.get_total_minutes() == 63);
-	ts = timespan(1, 1, 3, 15);
-	assert(ts.get_total_minutes() == 1503);
-	//Negative values
-	ts = timespan(0, 0, 0, -15);
-	assert(ts.get_total_minutes() == 0);
-	ts = timespan(0, 0, -3, -15);
-	assert(ts.get_total_minutes() == -3);
-	ts = timespan(0, -1, -3, -15);
-	assert(ts.get_total_minutes() == -63);
-	ts = timespan(-1, -1, -3, -15);
-	assert(ts.get_total_minutes() == -1503);
-}
-
-void test_timespan_get_total_hours()
-{
-	timespan ts(0, 0, 0, 15);
-	assert(ts.get_total_hours() == 0);
-	ts = timespan(0, 0, 3, 15);
-	assert(ts.get_total_hours() == 0);
-	ts = timespan(0, 1, 3, 15);
-	assert(ts.get_total_hours() == 1);
-	ts = timespan(3, 1, 3, 15);
-	assert(ts.get_total_hours() == 73);
-	//Negative values
-	ts = timespan(0, 0, 0, -15);
-	assert(ts.get_total_hours() == 0);
-	ts = timespan(0, 0, -3, -15);
-	assert(ts.get_total_hours() == 0);
-	ts = timespan(0, -1, -3, -15);
-	assert(ts.get_total_hours() == -1);
-	ts = timespan(-3, -1, -3, -15);
-	assert(ts.get_total_hours() == -73);
-}
-
-int main()
-{
-	// Unit tests
 	test_constructor();
 	test_to_string();
 	test_to_shortdate_string();
@@ -625,18 +543,10 @@ int main()
 	test_operator_less_equal();
 	test_operator_greater();
 	test_operator_greater_equal();
+	test_operator_equal();
+	test_operator_not_equal();
 	test_operator_minus();
 	test_get_weekday();
 	test_parse();
 	test_tostring_format();
-	test_timespan_constructor();
-	test_timespan_get_total_seconds();
-	test_timespan_get_total_minutes();
-	test_timespan_get_total_hours();
-
-	cout << "Unit tests successful!" << endl;
-
-	_getch();
-	return 0;
 }
-

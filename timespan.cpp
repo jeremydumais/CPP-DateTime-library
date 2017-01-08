@@ -1,6 +1,7 @@
 #include "include\timespan.h"
 #include <stdexcept>
 
+using namespace std;
 
 timespan::timespan(int days, int hours, int minutes, int seconds)
 	//days(days), hours(hours), minutes(minutes), seconds(seconds)
@@ -51,4 +52,61 @@ int timespan::get_total_minutes() const
 int timespan::get_total_seconds() const
 {
 	return  (days * 60 * 60 * 24) + (hours * 60 * 60) + (minutes * 60) + seconds;
+}
+
+bool operator<(const timespan &mts, const timespan &ots)
+{
+	if (mts.days < ots.days)
+		return true;
+	else if (mts.days > ots.days)
+		return false;
+	else
+	{
+		if (mts.hours < ots.hours)
+			return true;
+		else if (mts.hours > ots.hours)
+			return false;
+		else
+		{
+			if (mts.minutes < ots.minutes)
+				return true;
+			else if (mts.minutes > ots.minutes)
+				return false;
+			else
+			{
+				if (mts.seconds < ots.seconds)
+					return true;
+				else
+					return false;
+			}
+		}
+	}
+}
+
+bool operator>(const timespan &mts, const timespan &ots)
+{
+	return ots < mts;
+}
+
+bool operator<=(const timespan &mts, const timespan &ots)
+{
+	return !(mts > ots);
+}
+
+bool operator>=(const timespan &mts, const timespan &ots)
+{
+	return !(mts < ots);
+}
+
+bool operator==(const timespan &mts, const timespan &ots)
+{
+	return mts.days == ots.days && 
+		mts.hours == ots.hours && 
+		mts.minutes == ots.minutes && 
+		mts.seconds == ots.seconds;
+}
+
+bool operator!=(const timespan &mts, const timespan &ots)
+{
+	return !(mts == ots);
 }

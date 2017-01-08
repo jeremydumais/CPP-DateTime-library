@@ -453,6 +453,16 @@ bool operator>=(const datetime &mdt, const datetime &odt)
     return !(mktime(mdt.timeInfo) < mktime(odt.timeInfo));
 }
 
+bool operator==(const datetime &mdt, const datetime &odt)
+{
+	return mktime(mdt.timeInfo) == mktime(odt.timeInfo);
+}
+
+bool operator!=(const datetime &mdt, const datetime &odt)
+{
+	return !(mktime(mdt.timeInfo) == mktime(odt.timeInfo));
+}
+
 timespan operator-(const datetime &mdt, const datetime &odt)
 {
 	int days = 0, hours = 0, minutes = 0, seconds = 0;

@@ -22,13 +22,15 @@ class __declspec(dllexport) datetime
         datetime(int year, int month, int day, int hour = 0, int minute = 0, int second = 0);
         datetime(const datetime&);
         const datetime& operator=(const datetime &dt);
+		virtual ~datetime();
         friend std::ostream& operator<<(std::ostream &os, const datetime &dt);
 		__declspec(dllexport) friend bool operator<(const datetime &mdt, const datetime &odt);
 		__declspec(dllexport) friend bool operator>(const datetime &mdt, const datetime &odt);
         __declspec(dllexport) friend bool operator<=(const datetime &mdt, const datetime &odt);
 		__declspec(dllexport) friend bool operator>=(const datetime &mdt, const datetime &odt);
+		__declspec(dllexport) friend bool operator==(const datetime& mdt, const datetime &odt);
+		__declspec(dllexport) friend bool operator!=(const datetime& mdt, const datetime &odt);
 		__declspec(dllexport) friend timespan operator-(const datetime& mdt, const datetime &odt);
-        virtual ~datetime();
         string to_string() const;
         string to_string(string format) const;
         string to_shortdate_string() const;

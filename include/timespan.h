@@ -12,6 +12,13 @@ class __declspec(dllexport) timespan
 		int get_total_hours() const;
 		int get_total_minutes() const;
 		int get_total_seconds() const;
+		//Operators
+		__declspec(dllexport) friend bool operator<(const timespan &mts, const timespan &ots);
+		__declspec(dllexport) friend bool operator>(const timespan &mts, const timespan &ots);
+		__declspec(dllexport) friend bool operator<=(const timespan &mts, const timespan &ots);
+		__declspec(dllexport) friend bool operator>=(const timespan &mts, const timespan &ots);
+		__declspec(dllexport) friend bool operator==(const timespan &mts, const timespan &ots);
+		__declspec(dllexport) friend bool operator!=(const timespan &mts, const timespan &ots);
 	private:
 		int days;
 		int hours;
