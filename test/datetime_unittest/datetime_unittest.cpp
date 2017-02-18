@@ -7,6 +7,7 @@
 #include <exception>
 
 using namespace std;
+using namespace jed_utils;
 
 void test_constructor()
 {

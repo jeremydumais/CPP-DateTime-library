@@ -1,13 +1,13 @@
-#include "..\..\include\datetime.h"
 #include <iostream>
 #include <assert.h>
 #include <cstring>
 #include <exception>
-#include <conio.h>
-
+#include <iostream>
 
 void datetime_unittest();
 void timespan_unittest();
+
+using namespace std;
 
 int main()
 {
@@ -17,6 +17,5 @@ int main()
 
 	cout << "Unit tests successful!" << endl;
 
-	_getch();
 	return 0;
 }

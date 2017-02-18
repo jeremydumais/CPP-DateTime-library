@@ -142,16 +142,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="datetime.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="timespan.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="include\datetime.h" />
     <ClInclude Include="include\timespan.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\datetime.cpp" />
+    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\timespan.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,6 +5,7 @@
 #include <exception>
 
 using namespace std;
+using namespace jed_utils;
 
 void test_timespan_constructor()
 {
