@@ -49,6 +49,7 @@ namespace jed_utils
 		void add_seconds(int nb_seconds);
 		bool is_leapyear();
 		static datetime parse(std::string format, std::string value);
+		static bool is_leapyear(int year);
 	protected:
 		const int ONE_DAY = 86400; //24 hours * 60 mins * 60 secs
 		const int ONE_HOUR = 3600; //60 mins * 60 secs

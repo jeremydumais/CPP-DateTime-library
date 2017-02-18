@@ -29,6 +29,7 @@ void add_minutes(int nb_minutes);
 void add_seconds(int nb_seconds);
 bool is_leapyear();
 static datetime parse(string format, string value); 
+static bool is_leapyear(int year);
 //NB: At this time only the following format specifiers (yyyy, MM, dd, HH, mm and ss) 
 //    are supported by the parse method.
 ```	

@@ -331,6 +331,12 @@ namespace jed_utils
 		return _is_leapyear(get_year());
 	}
 
+	bool datetime::is_leapyear(int year)
+	{
+		datetime dateTemp(year, 1, 1);
+		return dateTemp.is_leapyear();
+	}
+
 	void datetime::_copy_from(const tm * otm)
 	{
 		timeInfo->tm_year = otm->tm_year;

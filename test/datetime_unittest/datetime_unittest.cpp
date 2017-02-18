@@ -11,23 +11,22 @@ using namespace jed_utils;
 
 void test_constructor()
 {
-	datetime* dtTest = new datetime(2015, 02, 14);
-	assert(dtTest->get_year() == 2015);
-	assert(dtTest->get_month() == 2);
-	assert(dtTest->get_day() == 14);
-	assert(dtTest->get_hour() == 0);
-	assert(dtTest->get_minute() == 0);
-	assert(dtTest->get_second() == 0);
-	delete dtTest;
+	datetime dtTest(2015, 02, 14);
+	assert(dtTest.get_year() == 2015);
+	assert(dtTest.get_month() == 2);
+	assert(dtTest.get_day() == 14);
+	assert(dtTest.get_hour() == 0);
+	assert(dtTest.get_minute() == 0);
+	assert(dtTest.get_second() == 0);
 
-	dtTest = new datetime(2015, 02, 14, 23, 12, 11);
-	assert(dtTest->get_year() == 2015);
-	assert(dtTest->get_month() == 2);
-	assert(dtTest->get_day() == 14);
-	assert(dtTest->get_hour() == 23);
-	assert(dtTest->get_minute() == 12);
-	assert(dtTest->get_second() == 11);
-	delete dtTest;
+	dtTest = datetime(2015, 02, 14, 23, 12, 11);
+	assert(dtTest.get_year() == 2015);
+	assert(dtTest.get_month() == 2);
+	assert(dtTest.get_day() == 14);
+	assert(dtTest.get_hour() == 23);
+	assert(dtTest.get_minute() == 12);
+	assert(dtTest.get_second() == 11);
+
 	// Invalid month (under)
 	try { datetime dtTestExept(2015, 00, 14); }
 	catch (const std::invalid_argument &e) {
@@ -66,15 +65,13 @@ void test_constructor()
 	catch (const std::invalid_argument &e) {
 		assert(strcmp(e.what(), "day is out of range") == 0);
 	}
-	dtTest = new datetime(2000, 02, 29);
-	delete dtTest;
+	dtTest = datetime(2000, 02, 29);
 
 	try { datetime dtTestExept(2001, 2, 29); }
 	catch (const std::invalid_argument &e) {
 		assert(strcmp(e.what(), "day is out of range") == 0);
 	}
-	dtTest = new datetime(2001, 02, 28);
-	delete dtTest;
+	dtTest = datetime(2001, 02, 28);
 
 	// Invalid hour (under)
 	try { datetime dtTestExept(2015, 1, 14, -1); }
@@ -110,105 +107,86 @@ void test_constructor()
 
 void test_to_string()
 {
-	datetime* dtTest = new datetime(2015, 02, 14);
-	assert(strcmp(dtTest->to_string().c_str(), "2015-02-14 00:00:00") == 0);
-	delete dtTest;
+	datetime dtTest = datetime(2015, 02, 14);
+	assert(strcmp(dtTest.to_string().c_str(), "2015-02-14 00:00:00") == 0);
 
-	dtTest = new datetime(2015, 02, 14, 11, 7, 2);
-	assert(strcmp(dtTest->to_string().c_str(), "2015-02-14 11:07:02") == 0);
-	delete dtTest;
+	dtTest = datetime(2015, 02, 14, 11, 7, 2);
+	assert(strcmp(dtTest.to_string().c_str(), "2015-02-14 11:07:02") == 0);
 
-	dtTest = new datetime(2015, 02, 14, 11, 55, 45);
-	assert(strcmp(dtTest->to_string().c_str(), "2015-02-14 11:55:45") == 0);
-	delete dtTest;
+	dtTest = datetime(2015, 02, 14, 11, 55, 45);
+	assert(strcmp(dtTest.to_string().c_str(), "2015-02-14 11:55:45") == 0);
 }
 
 void test_to_shortdate_string()
 {
-	datetime* dtTest = new datetime(2015, 02, 14);
-	assert(strcmp(dtTest->to_shortdate_string().c_str(), "2015-02-14") == 0);
-	delete dtTest;
+	datetime dtTest = datetime(2015, 02, 14);
+	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-02-14") == 0);
 
-	dtTest = new datetime(2015, 02, 14, 11, 7, 2);
-	assert(strcmp(dtTest->to_shortdate_string().c_str(), "2015-02-14") == 0);
-	delete dtTest;
+	dtTest = datetime(2015, 02, 14, 11, 7, 2);
+	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-02-14") == 0);
 
-	dtTest = new datetime(2015, 02, 14, 11, 55, 45);
-	assert(strcmp(dtTest->to_shortdate_string().c_str(), "2015-02-14") == 0);
-	delete dtTest;
+	dtTest = datetime(2015, 02, 14, 11, 55, 45);
+	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-02-14") == 0);
 }
 
 void test_add_days()
 {
-	datetime* dtTest = new datetime(2015, 02, 14);
-	dtTest->add_days(2);
+	datetime dtTest = datetime(2015, 02, 14);
+	dtTest.add_days(2);
 
-	assert(strcmp(dtTest->to_shortdate_string().c_str(), "2015-02-16") == 0);
-	delete dtTest;
+	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-02-16") == 0);
 
-	dtTest = new datetime(2015, 02, 27, 11, 7, 2);
-	dtTest->add_days(5);
-	assert(strcmp(dtTest->to_shortdate_string().c_str(), "2015-03-04") == 0);
-	delete dtTest;
+	dtTest = datetime(2015, 02, 27, 11, 7, 2);
+	dtTest.add_days(5);
+	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-03-04") == 0);
 
-	dtTest = new datetime(2015, 02, 02, 11, 7, 2);
-	dtTest->add_days(-3);
-	assert(strcmp(dtTest->to_shortdate_string().c_str(), "2015-01-30") == 0);
-	delete dtTest;
+	dtTest = datetime(2015, 02, 02, 11, 7, 2);
+	dtTest.add_days(-3);
+	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-01-30") == 0);
 }
 
 void test_add_months()
 {
-	datetime* dtTest = new datetime(2015, 02, 14);
-	dtTest->add_months(2);
-	assert(strcmp(dtTest->to_shortdate_string().c_str(), "2015-04-14") == 0);
-	delete dtTest;
+	datetime dtTest = datetime(2015, 02, 14);
+	dtTest.add_months(2);
+	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-04-14") == 0);
 
-	dtTest = new datetime(2015, 04, 14);
-	dtTest->add_months(-2);
-	assert(strcmp(dtTest->to_shortdate_string().c_str(), "2015-02-14") == 0);
-	delete dtTest;
+	dtTest = datetime(2015, 04, 14);
+	dtTest.add_months(-2);
+	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-02-14") == 0);
 
-	dtTest = new datetime(2015, 11, 14);
-	dtTest->add_months(3);
-	assert(strcmp(dtTest->to_shortdate_string().c_str(), "2016-02-14") == 0);
-	delete dtTest;
+	dtTest = datetime(2015, 11, 14);
+	dtTest.add_months(3);
+	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2016-02-14") == 0);
 
-	dtTest = new datetime(2015, 11, 14);
-	dtTest->add_months(23);
-	assert(strcmp(dtTest->to_shortdate_string().c_str(), "2017-10-14") == 0);
-	delete dtTest;
+	dtTest = datetime(2015, 11, 14);
+	dtTest.add_months(23);
+	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2017-10-14") == 0);
 
-	dtTest = new datetime(2015, 11, 14);
-	dtTest->add_months(-13);
-	assert(strcmp(dtTest->to_shortdate_string().c_str(), "2014-10-14") == 0);
-	delete dtTest;
+	dtTest = datetime(2015, 11, 14);
+	dtTest.add_months(-13);
+	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2014-10-14") == 0);
 }
 
 void test_add_years()
 {
-	datetime* dtTest = new datetime(2015, 02, 14);
-	dtTest->add_years(2);
-	assert(strcmp(dtTest->to_shortdate_string().c_str(), "2017-02-14") == 0);
-	delete dtTest;
+	datetime dtTest = datetime(2015, 02, 14);
+	dtTest.add_years(2);
+	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2017-02-14") == 0);
 
-	dtTest = new datetime(2015, 02, 14);
-	dtTest->add_years(-2);
-	assert(strcmp(dtTest->to_shortdate_string().c_str(), "2013-02-14") == 0);
-	delete dtTest;
+	dtTest = datetime(2015, 02, 14);
+	dtTest.add_years(-2);
+	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2013-02-14") == 0);
 }
 
 void test_is_leapyear()
 {
-	datetime* dtTest = new datetime(2000, 01, 01);
-	assert(dtTest->is_leapyear());
-	delete dtTest;
-	dtTest = new datetime(2004, 01, 01);
-	assert(dtTest->is_leapyear());
-	delete dtTest;
-	dtTest = new datetime(1700, 01, 01);
-	assert(!dtTest->is_leapyear());
-	delete dtTest;
+	datetime dtTest(2000, 01, 01);
+	assert(dtTest.is_leapyear());
+	dtTest = datetime(2004, 01, 01);
+	assert(dtTest.is_leapyear());
+	dtTest = datetime(1700, 01, 01);
+	assert(!dtTest.is_leapyear());
 }
 
 void test_add_hours()
@@ -528,6 +506,13 @@ void test_operator_minus()
 	assert(ts1.get_seconds() == 7);
 }
 
+void test_static_is_leapyear()
+{
+	assert(datetime::is_leapyear(2000));
+	assert(datetime::is_leapyear(2004));
+	assert(!datetime::is_leapyear(1700));
+}
+
 void datetime_unittest()
 {
 	test_constructor();
@@ -550,4 +535,5 @@ void datetime_unittest()
 	test_get_weekday();
 	test_parse();
 	test_tostring_format();
+	test_static_is_leapyear();
 }
