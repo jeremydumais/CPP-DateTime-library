@@ -27,14 +27,6 @@ void test_constructor()
 	assert(dtTest.get_minute() == 12);
 	assert(dtTest.get_second() == 11);
 
-	dtTest = datetime(2015, 02, 14, 4, 12, 11, period::PM);
-	assert(dtTest.get_year() == 2015);
-	assert(dtTest.get_month() == 2);
-	assert(dtTest.get_day() == 14);
-	assert(dtTest.get_hour() == 16);
-	assert(dtTest.get_minute() == 12);
-	assert(dtTest.get_second() == 11);
-
 	// Invalid month (under)
 	try
 	{
@@ -634,52 +626,13 @@ void test_parse()
 	assert(dtTest.get_second() == 42);
 
 	//Test hh 1 AM
-	dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818011442AM"));
+	dtTest = datetime::parse(string("yyyyMMddhhmmss"), string("20160818011442"));
 	assert(dtTest.get_year() == 2016);
 	assert(dtTest.get_month() == 8);
 	assert(dtTest.get_day() == 18);
 	assert(dtTest.get_hour() == 1);
 	assert(dtTest.get_minute() == 14);
 	assert(dtTest.get_second() == 42);
-
-	//Test hh 1 PM
-	dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818011442PM"));
-	assert(dtTest.get_year() == 2016);
-	assert(dtTest.get_month() == 8);
-	assert(dtTest.get_day() == 18);
-	assert(dtTest.get_hour() == 13);
-	assert(dtTest.get_minute() == 14);
-	assert(dtTest.get_second() == 42);
-
-	//Test hh 12 PM
-	dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818121442PM"));
-	assert(dtTest.get_year() == 2016);
-	assert(dtTest.get_month() == 8);
-	assert(dtTest.get_day() == 18);
-	assert(dtTest.get_hour() == 12);
-	assert(dtTest.get_minute() == 14);
-	assert(dtTest.get_second() == 42);
-
-	//Test hh 11 PM
-	dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818111442PM"));
-	assert(dtTest.get_year() == 2016);
-	assert(dtTest.get_month() == 8);
-	assert(dtTest.get_day() == 18);
-	assert(dtTest.get_hour() == 23);
-	assert(dtTest.get_minute() == 14);
-	assert(dtTest.get_second() == 42);
-
-	//Test hh 13 with invalide period
-	try
-	{
-		dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818111442EM"));
-		assert(false);
-	}
-	catch (invalid_argument& err)
-	{
-		assert(strcmp(err.what(), "invalid value for period") == 0);
-	}
-	catch (...) { assert(false); }
 }
 
 void test_tostring_format()

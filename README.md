@@ -7,7 +7,13 @@
 ####Constructors
 ```c++
 datetime(); // Get the current date and time
-datetime(int year, int month, int day, int hour = 0, int minute = 0, int second = 0);
+datetime(int year, 
+	int month, 
+	int day, 
+	int hour = 0, 
+	int minute = 0, 
+	int second = 0, 
+	period day_period = period::undefined);
 ```
 
 ####Available methods
@@ -29,9 +35,9 @@ void add_minutes(int nb_minutes);
 void add_seconds(int nb_seconds);
 bool is_leapyear();
 static datetime parse(string format, string value); 
-static bool is_leapyear(int year);
-//NB: At this time only the following format specifiers (yyyy, MM, dd, HH, mm and ss) 
+//NB: At this time only the following format specifiers (yyyy, MM, dd, HH, hh, mm, ss and tt) 
 //    are supported by the parse method.
+static bool is_leapyear(int year);
 ```	
 
 ####Supported operators
@@ -64,8 +70,13 @@ static bool is_leapyear(int year);
 | mm | The minute, from 00 through 59. |
 | s | The second, from 0 through 59. |
 | ss | The second, from 00 through 59. |
-| tt | The AM/PM designator. |
+| tt | The period (AM/PM designator). |
 
+####Enumerators
+```c++
+enum weekday { sunday, monday, tuesday, wednesday, thursday, friday, saturday };
+enum period { undefined, AM, PM };  //undefined is for 24 hour format
+```
 
 ###timespan class
 
@@ -105,16 +116,22 @@ int get_total_seconds();
 datetime dtTest = datetime();
 ```
 
-#####Create a known date
+#####Create a date
 
 ```c++
 datetime dtTest = datetime(2016, 11, 25);
 ```
 
-#####Create a known date with time (year, month, day, hour, minute, second)
+#####Create a date with time (year, month, day, hour, minute, second)
 
 ```c++
 datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
+```
+
+#####Create a date with time (12 hour format) (year, month, day, hour, minute, second, period)
+
+```c++
+datetime dtTest = datetime(2016, 11, 25, 4, 12, 44, period::PM);
 ```
 
 #####Add a week to a date

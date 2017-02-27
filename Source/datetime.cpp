@@ -21,7 +21,7 @@ namespace jed_utils
 		}
 	}
 
-	datetime::datetime(int year, int month, int day, int hour, int minute, int second)
+	datetime::datetime(int year, int month, int day, int hour, int minute, int second, period day_period)
 	{
 		//Check out of range limit
 		if (month < 1 || month > 12)
@@ -36,8 +36,26 @@ namespace jed_utils
 			throw invalid_argument("day is out of range");
 		else if (month == 2 && !this->_is_leapyear(year) && day > 28)
 			throw invalid_argument("day is out of range");
-		if (hour < 0 || hour > 23)
-			throw invalid_argument("hour must be between 0 and 23");
+		if (day_period == period::undefined)
+		{
+			if (hour < 0 || hour > 23)
+				throw invalid_argument("hour must be between 0 and 23");
+		}
+		else
+		{
+			if (day_period != period::AM && day_period != period::PM)
+				throw invalid_argument("the selected period is out of range");
+			if (hour < 1 || hour > 12)
+				throw invalid_argument("hour must be between 1 and 12");
+			else
+			{
+				//Adjust to 24 hour format
+				if (hour == 12 && day_period == period::AM)
+					hour = 0;
+				else if (day_period == period::PM && hour < 12)
+					hour = hour + 12;
+			}
+		}
 		if (minute < 0 || minute > 59)
 			throw invalid_argument("minute must be between 0 and 59");
 		if (second < 0 || second > 59)
@@ -360,6 +378,7 @@ namespace jed_utils
 		string pattern_temp = "";
 		int pattern_firstindex = 0;
 		bool is_letter = false;
+		period day_period = period::undefined;
 		for (unsigned int index_char = 0; index_char < format.length(); index_char++)
 		{
 			//Check if the character is a valid pattern char
@@ -391,10 +410,25 @@ namespace jed_utils
 						ptr_date_section = &day;
 					if (pattern_temp == "HH")
 						ptr_date_section = &hour;
+					if (pattern_temp == "hh")
+					{
+						ptr_date_section = &hour;
+						day_period = period::AM; //Set default day period
+					}
 					if (pattern_temp == "mm")
 						ptr_date_section = &minute;
 					if (pattern_temp == "ss")
 						ptr_date_section = &second;
+					if (pattern_temp == "tt") //Day period
+					{
+						string period_str = value.substr(pattern_firstindex, pattern_temp.length());
+						if (strcmpi(period_str.c_str(), "AM") == 0)
+							day_period = period::AM;
+						else if(strcmpi(period_str.c_str(), "PM") == 0)
+							day_period = period::PM;
+						else
+							throw invalid_argument("invalid value for period");
+					}
 					if (ptr_date_section != nullptr)
 						*ptr_date_section = _parse_intvalue(pattern_temp, pattern_firstindex, pattern_temp.length(), value);
 				}
@@ -408,7 +442,7 @@ namespace jed_utils
 			}
 		}
 
-		return datetime(year, month, day, hour, minute, second);
+		return datetime(year, month, day, hour, minute, second, day_period);
 	}
 
 	int datetime::_parse_intvalue(string pattern, int index, int mask_length, string parse_str)

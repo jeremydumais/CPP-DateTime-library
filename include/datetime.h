@@ -14,12 +14,13 @@
 namespace jed_utils
 {
 	enum weekday { sunday, monday, tuesday, wednesday, thursday, friday, saturday };
+	enum period { undefined, AM, PM };
 
 	class __declspec(dllexport) datetime
 	{
 	public:
 		datetime();
-		datetime(int year, int month, int day, int hour = 0, int minute = 0, int second = 0);
+		datetime(int year, int month, int day, int hour = 0, int minute = 0, int second = 0, period day_period = period::undefined);
 		datetime(const datetime&);
 		const datetime& operator=(const datetime &dt);
 		virtual ~datetime();
