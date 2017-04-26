@@ -58,6 +58,7 @@ static bool is_leapyear(int year);
 | Format specifier | Description |
 | --- | --- |
 | yyyy | The year as a four-digit number. |
+| yy | The year as a two-digit number. |
 | M | The month, from 1 through 12. |
 | MM | The month, from 01 through 12. |
 | d | The day of the month, from 1 through 31. |

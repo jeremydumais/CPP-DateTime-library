@@ -33,7 +33,7 @@ namespace jed_utils
 		__declspec(dllexport) friend bool operator!=(const datetime& mdt, const datetime &odt);
 		__declspec(dllexport) friend timespan operator-(const datetime& mdt, const datetime &odt);
 		std::string to_string() const;
-		std::string to_string(std::string format) const;
+		std::string to_string(const std::string& format) const;
 		std::string to_shortdate_string() const;
 		int get_year() const;
 		int get_month() const;
@@ -49,7 +49,7 @@ namespace jed_utils
 		void add_minutes(int nb_minutes);
 		void add_seconds(int nb_seconds);
 		bool is_leapyear();
-		static datetime parse(std::string format, std::string value);
+		static datetime parse(const std::string& format, const std::string& value);
 		static bool is_leapyear(int year);
 	protected:
 		const int ONE_DAY = 86400; //24 hours * 60 mins * 60 secs

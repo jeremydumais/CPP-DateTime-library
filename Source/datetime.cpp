@@ -112,7 +112,7 @@ namespace jed_utils
 
 	}
 
-	string datetime::to_string(string format) const
+	string datetime::to_string(const string& format) const
 	{
 		string retVal = "";
 
@@ -144,6 +144,11 @@ namespace jed_utils
 				if (pattern_temp == "yyyy")
 				{
 					sprintf_s(value_converted, "%04d", this->get_year());
+					retVal += value_converted;
+				}
+				else if (pattern_temp == "yy")
+				{
+					sprintf_s(value_converted, "%02d", this->get_year() % 100);
 					retVal += value_converted;
 				}
 				else if (pattern_temp == "MM")
@@ -368,7 +373,7 @@ namespace jed_utils
 		timeInfo->tm_yday = otm->tm_yday;
 	}
 
-	datetime datetime::parse(string format, string value)
+	datetime datetime::parse(const string& format, const string& value)
 	{
 		int year = 1970, month = 1, day = 1, hour = 0, minute = 0, second = 0;
 

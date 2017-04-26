@@ -3,3 +3,9 @@
 ################################################################################
 
 /.vs/datetime/v14
+/Debug
+/test/datetime_unittest/Debug
+/test/datetime_unittest/x64/Debug
+/x64/Debug
+/datetime.VC.db
+/datetime.VC.VC.opendb

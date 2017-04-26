@@ -725,6 +725,10 @@ void test_tostring_format()
 	dtTest = datetime(2015, 2, 5, 0, 0, 0);
 	assert(dtTest.to_string("yyyy-MM-dd hh:mm:ss tt") == "2015-02-05 12:00:00 AM");
 	assert(dtTest.to_string("yyyy-MM-dd h:mm:ss tt") == "2015-02-05 12:00:00 AM");
+	assert(dtTest.to_string("yy-MM-dd h:mm:ss tt") == "15-02-05 12:00:00 AM"); //Format yy
+
+	dtTest = datetime(1913, 2, 5, 0, 0, 0);
+	assert(dtTest.to_string("yy/MM/dd h:mm:ss tt") == "13/02/05 12:00:00 AM"); //Format yy
 }
 
 void test_operator_minus()
