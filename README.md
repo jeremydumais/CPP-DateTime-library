@@ -1,10 +1,10 @@
-#Jed# C++ DateTime Library
+# Jed# C++ DateTime Library
 
-##Jed# C++ DateTime library is a simple Date and time library built in C++.
+## Jed# C++ DateTime library is a simple Date and time library built in C++.
 
-###datetime class
+### datetime class
 
-####Constructors
+#### Constructors
 ```c++
 datetime(); // Get the current date and time
 datetime(int year, 
@@ -16,7 +16,7 @@ datetime(int year,
 	period day_period = period::undefined);
 ```
 
-####Available methods
+#### Available methods
 ```c++
 string to_string();
 string to_shortdate_string();
@@ -40,7 +40,7 @@ static datetime parse(string format, string value);
 static bool is_leapyear(int year);
 ```	
 
-####Supported operators
+#### Supported operators
 
 | Operator | Quick description | Example |
 | --- | --- | --- |
@@ -73,20 +73,20 @@ static bool is_leapyear(int year);
 | ss | The second, from 00 through 59. |
 | tt | The period (AM/PM designator). |
 
-####Enumerators
+#### Enumerators
 ```c++
 enum weekday { sunday, monday, tuesday, wednesday, thursday, friday, saturday };
 enum period { undefined, AM, PM };  //undefined is for 24 hour format
 ```
 
-###timespan class
+### timespan class
 
-####Constructor
+#### Constructor
 ```c++
 timespan(int days, int hours=0, int minutes=0, int seconds=0);
 ```
 
-####Available methods
+#### Available methods
 ```c++
 int get_days();
 int get_hours();
@@ -97,7 +97,7 @@ int get_total_minutes();
 int get_total_seconds();
 ```	
 
-####Supported operators
+#### Supported operators
 
 | Operator | Quick description | Example |
 | --- | --- | --- |
@@ -109,61 +109,61 @@ int get_total_seconds();
 | != | Inequality operator | assert(timespan(1, 2, 3, 4) != timespan(1, 2, 3, 3)); |
 
 
-###Here's some examples
+### Here's some examples
 
-#####Get the current date and time
+##### Get the current date and time
 
 ```c++
 datetime dtTest = datetime();
 ```
 
-#####Create a date
+##### Create a date
 
 ```c++
 datetime dtTest = datetime(2016, 11, 25);
 ```
 
-#####Create a date with time (year, month, day, hour, minute, second)
+##### Create a date with time (year, month, day, hour, minute, second)
 
 ```c++
 datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
 ```
 
-#####Create a date with time (12 hour format) (year, month, day, hour, minute, second, period)
+##### Create a date with time (12 hour format) (year, month, day, hour, minute, second, period)
 
 ```c++
 datetime dtTest = datetime(2016, 11, 25, 4, 12, 44, period::PM);
 ```
 
-#####Add a week to a date
+##### Add a week to a date
 
 ```c++
 datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
 dtTest.add_days(7);
 ```
 
-#####Substract a week from a date
+##### Substract a week from a date
 
 ```c++
 datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
 dtTest.add_days(-7);
 ```
 
-#####Display the date in standard form (yyyy-MM-dd HH:mm:ss)
+##### Display the date in standard form (yyyy-MM-dd HH:mm:ss)
 
 ```c++
 datetime dtTest = datetime();
 cout << dtTest.to_string() << endl;
 ```
 
-#####Display the date in custom format ("yyyy-MM-dd hh:mm:ss tt")
+##### Display the date in custom format ("yyyy-MM-dd hh:mm:ss tt")
 
 ```c++
 datetime dtTest = datetime();
 cout << dtTest.to_string("yyyy-MM-dd hh:mm:ss tt") << endl;
 ```
 
-#####Get weekday of a datetime
+##### Get weekday of a datetime
 
 ```c++
 //enum weekday { sunday, monday, tuesday, wednesday, thursday, friday, saturday };
@@ -171,13 +171,13 @@ datetime dtTest = datetime(2015, 02, 14, 11, 11, 11);
 assert(dtTest.get_weekday() == weekday::saturday);
 ```
 
-#####Parse a string to a datetime
+##### Parse a string to a datetime
 
 ```c++
 datetime dtTest = datetime::parse(string("yyyy/MM/dd HH:mm:ss"), string("2016-08-18 23:14:42"));
 ```
 
-#####Substracting two datetime objetcs (Example 1)
+##### Substracting two datetime objetcs (Example 1)
 
 ```c++
 datetime date1(2016, 12, 31, 11, 32, 5);
@@ -189,7 +189,7 @@ assert(ts1.get_minutes() == -36);
 assert(ts1.get_seconds() == -53);
 ```
 
-#####Substracting two datetime objetcs (Example 2)
+##### Substracting two datetime objetcs (Example 2)
 
 ```c++
 datetime date1(2016, 11, 25);
@@ -201,7 +201,7 @@ assert(ts1.get_minutes() == 0);
 assert(ts1.get_seconds() == 0);
 ```
 
-#####Get total minutes of a timespan
+##### Get total minutes of a timespan
 
 ```c++
 timespan ts(0, 1, 3, 15);
