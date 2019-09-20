@@ -3,19 +3,11 @@
 #include <cstring>
 #include <exception>
 #include <iostream>
-
-void datetime_unittest();
-void timespan_unittest();
-
+#include <gtest/gtest.h>
 using namespace std;
 
-int main()
+int main(int argc, char**argv)
 {
-	// Unit tests
-	datetime_unittest();
-	timespan_unittest();
-
-	cout << "Unit tests successful!" << endl;
-
-	return 0;
+	::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

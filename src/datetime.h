@@ -11,12 +11,22 @@
 #include <iostream>
 #include "timespan.h"
 
+#ifdef _WIN32
+	#ifdef DATETIME_EXPORTS  
+		#define DATETIME_API __declspec(dllexport)   
+	#else  
+		#define DATETIME_API __declspec(dllimport)   
+	#endif
+#else
+	#define DATETIME_API
+#endif
+
 namespace jed_utils
 {
 	enum weekday { sunday, monday, tuesday, wednesday, thursday, friday, saturday };
 	enum period { undefined, AM, PM };
 
-	class __declspec(dllexport) datetime
+	class DATETIME_API datetime
 	{
 	public:
 		datetime();
@@ -25,13 +35,13 @@ namespace jed_utils
 		const datetime& operator=(const datetime &dt);
 		virtual ~datetime();
 		friend std::ostream& operator<<(std::ostream &os, const datetime &dt);
-		__declspec(dllexport) friend bool operator<(const datetime &mdt, const datetime &odt);
-		__declspec(dllexport) friend bool operator>(const datetime &mdt, const datetime &odt);
-		__declspec(dllexport) friend bool operator<=(const datetime &mdt, const datetime &odt);
-		__declspec(dllexport) friend bool operator>=(const datetime &mdt, const datetime &odt);
-		__declspec(dllexport) friend bool operator==(const datetime& mdt, const datetime &odt);
-		__declspec(dllexport) friend bool operator!=(const datetime& mdt, const datetime &odt);
-		__declspec(dllexport) friend timespan operator-(const datetime& mdt, const datetime &odt);
+		DATETIME_API friend bool operator<(const datetime &mdt, const datetime &odt);
+		DATETIME_API friend bool operator>(const datetime &mdt, const datetime &odt);
+		DATETIME_API friend bool operator<=(const datetime &mdt, const datetime &odt);
+		DATETIME_API friend bool operator>=(const datetime &mdt, const datetime &odt);
+		DATETIME_API friend bool operator==(const datetime& mdt, const datetime &odt);
+		DATETIME_API friend bool operator!=(const datetime& mdt, const datetime &odt);
+		DATETIME_API friend timespan operator-(const datetime& mdt, const datetime &odt);
 		std::string to_string() const;
 		std::string to_string(const std::string& format) const;
 		std::string to_shortdate_string() const;
@@ -61,6 +71,6 @@ namespace jed_utils
 		static int _parse_intvalue(std::string pattern, int index, int mask_length, std::string parse_str);
 		void _copy_from(const tm* otm);
 	};
-}
+} // namespace jed_utils
 
 #endif // DATETIME_H

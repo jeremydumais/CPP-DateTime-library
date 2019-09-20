@@ -1,205 +1,254 @@
-// datetime_unittest.cpp : définit le point d'entrée pour l'application console.
-//
-#include "..\..\include\datetime.h"
+#include "../../src/datetime.h"
 #include <iostream>
 #include <assert.h>
 #include <cstring>
 #include <exception>
+#include <gtest/gtest.h>
 
-using namespace std;
 using namespace jed_utils;
+using namespace std;
 
-void test_constructor()
+TEST(datetime_constructor, ValidDateTime20150214_ReturnOK)
 {
 	datetime dtTest(2015, 02, 14);
-	assert(dtTest.get_year() == 2015);
-	assert(dtTest.get_month() == 2);
-	assert(dtTest.get_day() == 14);
-	assert(dtTest.get_hour() == 0);
-	assert(dtTest.get_minute() == 0);
-	assert(dtTest.get_second() == 0);
+	ASSERT_EQ(2015, dtTest.get_year());
+	ASSERT_EQ(2, dtTest.get_month());
+	ASSERT_EQ(14, dtTest.get_day());
+	ASSERT_EQ(0, dtTest.get_hour());
+	ASSERT_EQ(0, dtTest.get_minute());
+	ASSERT_EQ(0, dtTest.get_second());
+}
 
-	dtTest = datetime(2015, 02, 14, 23, 12, 11);
-	assert(dtTest.get_year() == 2015);
-	assert(dtTest.get_month() == 2);
-	assert(dtTest.get_day() == 14);
-	assert(dtTest.get_hour() == 23);
-	assert(dtTest.get_minute() == 12);
-	assert(dtTest.get_second() == 11);
+TEST(datetime_constructor, ValidDateTime20150214WithHour24Format_ReturnOK)
+{
+	datetime dtTest(2015, 02, 14, 23, 12, 11);
+	ASSERT_EQ(2015, dtTest.get_year());
+	ASSERT_EQ(2, dtTest.get_month());
+	ASSERT_EQ(14, dtTest.get_day());
+	ASSERT_EQ(23, dtTest.get_hour());
+	ASSERT_EQ(12, dtTest.get_minute());
+	ASSERT_EQ(11, dtTest.get_second());
+}
 
-	dtTest = datetime(2015, 02, 14, 4, 12, 11, period::PM);
-	assert(dtTest.get_year() == 2015);
-	assert(dtTest.get_month() == 2);
-	assert(dtTest.get_day() == 14);
-	assert(dtTest.get_hour() == 16);
-	assert(dtTest.get_minute() == 12);
-	assert(dtTest.get_second() == 11);
-
-	// Invalid month (under)
+TEST(datetime_constructor, InvalidMonthZero_ThrowInvalidArgumentException)
+{
 	try
 	{
 		datetime dtTestExept(2015, 00, 14); 
-		assert(false);
+		FAIL();
 	}
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "month must be between 1 and 12") == 0); }
-	catch (...) { assert(false); }
-	
-	// Invalid month (over)
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "month must be between 1 and 12");
+	}
+	catch (...) { FAIL(); }
+}
+
+TEST(datetime_constructor, InvalidMonthThirteen_ThrowInvalidArgumentException)
+{
 	try
 	{
-		datetime dtTestExept(2015, 13, 14);
-		assert(false);
+		datetime dtTestExept(2015, 13, 14); 
+		FAIL();
 	}
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "month must be between 1 and 12") == 0); }
-	catch (...) { assert(false); }
-	
-	// Invalid day (under)
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "month must be between 1 and 12");
+	}
+	catch (...) { FAIL(); }
+}
+
+TEST(datetime_constructor, InvalidDayZero_ThrowInvalidArgumentException)
+{
 	try
 	{
 		datetime dtTestExept(2015, 1, 0); 
-		assert(false);
+		FAIL();
 	}
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "day is out of range") == 0); }
-	catch (...) { assert(false); }
-	
-	// Invalid day (over)
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "day is out of range");
+	}
+	catch (...) { FAIL(); }
+}
+
+TEST(datetime_constructor, InvalidDay32ForMonthsWith31Days_ThrowInvalidArgumentException)
+{
 	int month_to_check_31[] = { 1,3,5,7,8,10,12 };
 	for (int i : month_to_check_31)
 	{
 		try 
 		{
 			datetime dtTestExept(2015, i, 32);
-			assert(false);
+			FAIL();
 		}
-		catch (const std::invalid_argument &e) {
-			assert(strcmp(e.what(), "day is out of range") == 0); }
-		catch (...) { assert(false); }
+		catch (const std::invalid_argument e) {
+			ASSERT_STREQ(e.what(), "day is out of range");
+		}
+		catch (...) { FAIL(); }
 	}
+}
 
-	//Day out of range
+TEST(datetime_constructor, InvalidDay31ForMonthsWith30Days_ThrowInvalidArgumentException)
+{
 	int month_to_check_30[] = { 4,6,9,11 };
 	for (int i : month_to_check_30)
 	{
 		try 
 		{
 			datetime dtTestExept(2015, i, 31);
-			assert(false);
+			FAIL();
 		}
-		catch (const std::invalid_argument &e) {
-			assert(strcmp(e.what(), "day is out of range") == 0); }
-		catch (...) { assert(false); }
+		catch (const std::invalid_argument e) {
+			ASSERT_STREQ(e.what(), "day is out of range"); 
+		}
+		catch (...) { FAIL(); }
 	}
-	
-	//Day out of range
+}
+
+TEST(datetime_constructor, InvalidDay30ForFebruary_ThrowInvalidArgumentException)
+{
 	try 
 	{
 		datetime dtTestExept(2000, 2, 30);
-		assert(false);
+		FAIL();
 	}
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "day is out of range") == 0); }
-	catch (...) { assert(false); }
-	
-	//Valid leap year
-	dtTest = datetime(2000, 02, 29);
-	
-	//Invalid leap year
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "day is out of range"); }
+	catch (...) { FAIL(); }
+}
+
+TEST(datetime_constructor, ValidLeapYear_ReturnOK)
+{
+	datetime dtTest = datetime(2000, 02, 29);
+	ASSERT_EQ(2000, dtTest.get_year());
+	ASSERT_EQ(2, dtTest.get_month());
+	ASSERT_EQ(29, dtTest.get_day());
+	ASSERT_EQ(0, dtTest.get_hour());
+	ASSERT_EQ(0, dtTest.get_minute());
+	ASSERT_EQ(0, dtTest.get_second());
+	ASSERT_TRUE(dtTest.is_leapyear());
+}
+
+TEST(datetime_constructor, InvalidDay29ForFebruaryNonLeapYear_ThrowInvalidArgumentException)
+{
 	try 
 	{
 		datetime dtTestExept(2001, 2, 29); 
-		assert(false);
+		FAIL();
 	}
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "day is out of range") == 0); }
-	catch (...) { assert(false); }
-	
-	//Valid Date
-	dtTest = datetime(2001, 02, 28);
-	
-	// Invalid hour (under)
+	catch (const std::invalid_argument e) {
+		assert(strcmp(e.what(), "day is out of range") == 0); 
+	}
+	catch (...) { FAIL(); }
+}
+
+TEST(datetime_constructor, InvalidHourMinus1_ThrowInvalidArgumentException)
+{
 	try 
 	{
 		datetime dtTestExept(2015, 1, 14, -1);
-		assert(false);
+		FAIL();
 	}
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "hour must be between 0 and 23") == 0); }
-	catch (...) { assert(false); }
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "hour must be between 0 and 23"); 
+	}
+	catch (...) { FAIL(); }
+}
 
-	// Invalid hour (over)
+TEST(datetime_constructor, InvalidHour24_ThrowInvalidArgumentException)
+{
 	try 
 	{
 		datetime dtTestExept(2015, 1, 14, 24);
-		assert(false);
+		FAIL();
 	}
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "hour must be between 0 and 23") == 0); }
-	catch (...) { assert(false); }
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "hour must be between 0 and 23"); 
+	}
+	catch (...) { FAIL(); }
+}
 
-	// Invalid minute (under)
+TEST(datetime_constructor, InvalidMinuteMinus1_ThrowInvalidArgumentException)
+{
 	try 
 	{
 		datetime dtTestExept(2015, 1, 14, 1, -1);
-		assert(false);
+		FAIL();
 	}
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "minute must be between 0 and 59") == 0); }
-	catch (...) { assert(false); }
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "minute must be between 0 and 59"); 
+	}
+	catch (...) { FAIL(); }
+}
 
-	// Invalid minute (over)
+TEST(datetime_constructor, InvalidMinute60_ThrowInvalidArgumentException)
+{
 	try 
 	{
 		datetime dtTestExept(2015, 1, 14, 1, 60);
-		assert(false);
+		FAIL();
 	}
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "minute must be between 0 and 59") == 0); }
-	catch (...) { assert(false); }
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "minute must be between 0 and 59"); 
+	}
+	catch (...) { FAIL(); }
+}
 
-	// Invalid second (under)
+TEST(datetime_constructor, InvalidSecondMinus1_ThrowInvalidArgumentException)
+{
 	try 
 	{
-		datetime dtTestExept(2015, 1, 14, 1, 1, -1); 
-		assert(false);
+		datetime dtTestExept(2015, 1, 14, 1, 1, -1);
+		FAIL();
 	}
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "second must be between 0 and 59") == 0); }
-	catch (...) { assert(false); }
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "second must be between 0 and 59"); 
+	}
+	catch (...) { FAIL(); }
+}
 
-	// Invalid second (over)
+TEST(datetime_constructor, InvalidSecond60_ThrowInvalidArgumentException)
+{
 	try 
 	{
-		datetime dtTestExept(2015, 1, 14, 1, 1, 60); 
-		assert(false);
+		datetime dtTestExept(2015, 1, 14, 1, 1, 60);
+		FAIL();
 	}
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "second must be between 0 and 59") == 0); }
-	catch (...) { assert(false); }
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "second must be between 0 and 59"); 
+	}
+	catch (...) { FAIL(); }
+}
 
-	// Invalid day period
+TEST(datetime_constructor, InvalidDayPeriod_ThrowInvalidArgumentException)
+{
 	try 
 	{
 		datetime dtTestExept(2015, 1, 14, 1, 1, 59, static_cast<period>(3)); 
-		assert(false);
+		FAIL();
 	}
-	catch (const std::invalid_argument &e) {
-		assert(strcmp(e.what(), "the selected period is out of range") == 0); }
-	catch (...) { assert(false); }
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "the selected period is out of range"); 
+	}
+	catch (...) { FAIL(); }
+
+
 }
 
-void test_to_string()
+TEST(datetime_to_string, ValidDate1_ReturnOK)
 {
 	datetime dtTest = datetime(2015, 02, 14);
-	assert(strcmp(dtTest.to_string().c_str(), "2015-02-14 00:00:00") == 0);
+	ASSERT_STREQ(dtTest.to_string().c_str(), "2015-02-14 00:00:00");
+}
 
-	dtTest = datetime(2015, 02, 14, 11, 7, 2);
-	assert(strcmp(dtTest.to_string().c_str(), "2015-02-14 11:07:02") == 0);
+TEST(datetime_to_string, ValidDate2_ReturnOK)
+{
+	datetime dtTest = datetime(2015, 02, 14, 11, 7, 2);
+	ASSERT_STREQ(dtTest.to_string().c_str(), "2015-02-14 11:07:02");
+}
 
-	dtTest = datetime(2015, 02, 14, 11, 55, 45);
-	assert(strcmp(dtTest.to_string().c_str(), "2015-02-14 11:55:45") == 0);
+TEST(datetime_to_string, ValidDate3_ReturnOK)
+{
+	datetime dtTest = datetime(2015, 02, 14, 11, 55, 45);
+	ASSERT_STREQ(dtTest.to_string().c_str(), "2015-02-14 11:55:45");
 }
 
 void test_to_shortdate_string()
@@ -798,29 +847,4 @@ void test_static_is_leapyear()
 	assert(datetime::is_leapyear(2000));
 	assert(datetime::is_leapyear(2004));
 	assert(!datetime::is_leapyear(1700));
-}
-
-void datetime_unittest()
-{
-	test_constructor();
-	test_to_string();
-	test_to_shortdate_string();
-	test_add_days();
-	test_add_months();
-	test_add_years();
-	test_is_leapyear();
-	test_add_hours();
-	test_add_minutes();
-	test_add_seconds();
-	test_operator_less();
-	test_operator_less_equal();
-	test_operator_greater();
-	test_operator_greater_equal();
-	test_operator_equal();
-	test_operator_not_equal();
-	test_operator_minus();
-	test_get_weekday();
-	test_parse();
-	test_tostring_format();
-	test_static_is_leapyear();
 }

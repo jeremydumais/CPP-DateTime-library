@@ -1,4 +1,4 @@
-#include "../Include/datetime.h"
+#include "datetime.h"
 
 using namespace std;
 
@@ -7,59 +7,60 @@ namespace jed_utils
 	//Default constructor get current date and time
 	datetime::datetime()
 	{
-		__time64_t long_time;
-		tm tm_now;
-		errno_t err;
+		time_t rawtime;
 
-		// Get time as 64-bit integer.  
-		_time64(&long_time);
-		err = localtime_s(&tm_now, &long_time);
-		if (err == 0)
-		{
-			timeInfo = new tm();
-			_copy_from(&tm_now);
-		}
+		time (&rawtime);
+		timeInfo = localtime(&rawtime);
 	}
 
 	datetime::datetime(int year, int month, int day, int hour, int minute, int second, period day_period)
 	{
 		//Check out of range limit
-		if (month < 1 || month > 12)
+		if (month < 1 || month > 12) {
 			throw invalid_argument("month must be between 1 and 12");
-		if (day < 1)
+		}
+		if (day < 1) {
 			throw invalid_argument("day is out of range");
-		if ((month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) && day > 31)
+		}
+		if ((month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) && day > 31) {
 			throw invalid_argument("day is out of range");
-		else if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30)
+		}
+		if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30) {
 			throw invalid_argument("day is out of range");
-		else if (month == 2 && this->_is_leapyear(year) && day > 29)
+		}
+		if (month == 2 && this->_is_leapyear(year) && day > 29) {
 			throw invalid_argument("day is out of range");
-		else if (month == 2 && !this->_is_leapyear(year) && day > 28)
+		}
+		if (month == 2 && !this->_is_leapyear(year) && day > 28) {
 			throw invalid_argument("day is out of range");
+		}
 		if (day_period == period::undefined)
 		{
-			if (hour < 0 || hour > 23)
+			if (hour < 0 || hour > 23) {
 				throw invalid_argument("hour must be between 0 and 23");
-		}
-		else
-		{
-			if (day_period != period::AM && day_period != period::PM)
-				throw invalid_argument("the selected period is out of range");
-			if (hour < 1 || hour > 12)
-				throw invalid_argument("hour must be between 1 and 12");
-			else
-			{
-				//Adjust to 24 hour format
-				if (hour == 12 && day_period == period::AM)
-					hour = 0;
-				else if (day_period == period::PM && hour < 12)
-					hour = hour + 12;
 			}
 		}
-		if (minute < 0 || minute > 59)
+		else {
+			if (day_period != period::AM && day_period != period::PM) {
+				throw invalid_argument("the selected period is out of range");
+			}
+			if (hour < 1 || hour > 12) {
+				throw invalid_argument("hour must be between 1 and 12");
+			}
+			//Adjust to 24 hour format
+			if (hour == 12 && day_period == period::AM) {
+				hour = 0;
+			}
+			else if (day_period == period::PM && hour < 12) {
+				hour = hour + 12;
+			}
+		}
+		if (minute < 0 || minute > 59) {
 			throw invalid_argument("minute must be between 0 and 59");
-		if (second < 0 || second > 59)
+		}
+		if (second < 0 || second > 59) {
 			throw invalid_argument("second must be between 0 and 59");
+		}
 		timeInfo = new tm();
 		timeInfo->tm_year = year - 1900;
 		timeInfo->tm_mon = month - 1;
@@ -80,8 +81,9 @@ namespace jed_utils
 
 	const datetime& datetime::operator=(const datetime &dt)
 	{
-		if (this != &dt)
+		if (this != &dt) {
 			_copy_from(dt.timeInfo);
+		}
 		return *this;
 	}
 
@@ -92,16 +94,18 @@ namespace jed_utils
 
 	bool datetime::_is_leapyear(int year) const
 	{
-		if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+		if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
 			return true;
-		else
+		}
+		else {
 			return false;
+		}
 	}
 
 	string datetime::to_string() const
 	{
 		char retVal[128] = "";
-		sprintf_s(retVal, "%d-%02d-%02d %02d:%02d:%02d",
+		sprintf(retVal, "%d-%02d-%02d %02d:%02d:%02d",
 			get_year(),
 			get_month(),
 			get_day(),
@@ -116,125 +120,105 @@ namespace jed_utils
 	{
 		string retVal = "";
 
-		if (strcmp(format.c_str(), "") == 0)
+		if (strcmp(format.c_str(), "") == 0) {
 			throw invalid_argument("format");
+		}
 		string pattern_temp = "";
-		for (unsigned int index_char = 0; index_char < format.length(); index_char++)
-		{
+		for (unsigned int index_char = 0; index_char < format.length(); index_char++) {
 			bool is_letter = false;
 			//Check if the character is a valid pattern char
 			if ((format[index_char] >= 'a' && format[index_char] <= 'z') ||
-				(format[index_char] >= 'A' && format[index_char] <= 'Z'))
-			{
+				(format[index_char] >= 'A' && format[index_char] <= 'Z')) {
 				is_letter = true;
-				if (pattern_temp.length() == 0)
-				{
-
+				if (pattern_temp.length() == 0) {
 					pattern_temp += format[index_char];
 				}
 				//Check if the pattern has not changed
-				else if (format[index_char] == pattern_temp[pattern_temp.length() - 1])
+				else if (format[index_char] == pattern_temp[pattern_temp.length() - 1]) {
 					pattern_temp += format[index_char];
+				}
 			}
 			//Check if the pattern has not changed
-			if (pattern_temp.length() > 0 && (format[index_char] != pattern_temp[pattern_temp.length() - 1] || index_char == format.length() - 1))
-			{
+			if (pattern_temp.length() > 0 && (format[index_char] != pattern_temp[pattern_temp.length() - 1] || index_char == format.length() - 1)) {
 				//int *ptr_date_section = nullptr;
 				char value_converted[5] = "";
-				if (pattern_temp == "yyyy")
-				{
-					sprintf_s(value_converted, "%04d", this->get_year());
+				if (pattern_temp == "yyyy") {
+					sprintf(value_converted, "%04d", this->get_year());
 					retVal += value_converted;
 				}
-				else if (pattern_temp == "yy")
-				{
-					sprintf_s(value_converted, "%02d", this->get_year() % 100);
+				else if (pattern_temp == "yy") {
+					sprintf(value_converted, "%02d", this->get_year() % 100);
 					retVal += value_converted;
 				}
-				else if (pattern_temp == "MM")
-				{
-					sprintf_s(value_converted, "%02d", this->get_month());
+				else if (pattern_temp == "MM") {
+					sprintf(value_converted, "%02d", this->get_month());
 					retVal += value_converted;
 				}
-				else if (pattern_temp == "M")
-				{
-					sprintf_s(value_converted, "%01d", this->get_month());
+				else if (pattern_temp == "M") {
+					sprintf(value_converted, "%01d", this->get_month());
 					retVal += value_converted;
 				}
-				else if (pattern_temp == "dd")
-				{
-					sprintf_s(value_converted, "%02d", this->get_day());
+				else if (pattern_temp == "dd") {
+					sprintf(value_converted, "%02d", this->get_day());
 					retVal += value_converted;
 				}
-				else if (pattern_temp == "d")
-				{
-					sprintf_s(value_converted, "%01d", this->get_day());
+				else if (pattern_temp == "d") {
+					sprintf(value_converted, "%01d", this->get_day());
 					retVal += value_converted;
 				}
-				else if (pattern_temp == "HH")
-				{
-					sprintf_s(value_converted, "%02d", this->get_hour());
+				else if (pattern_temp == "HH") {
+					sprintf(value_converted, "%02d", this->get_hour());
 					retVal += value_converted;
 				}
-				else if (pattern_temp == "H")
-				{
-					sprintf_s(value_converted, "%01d", this->get_hour());
+				else if (pattern_temp == "H") {
+					sprintf(value_converted, "%01d", this->get_hour());
 					retVal += value_converted;
 				}
-				else if (pattern_temp == "hh")
-				{
+				else if (pattern_temp == "hh") {
 					int instance_hour = this->get_hour();
-					if (instance_hour == 0)
+					if (instance_hour == 0) {
 						retVal += "12";
-					else if (instance_hour > 12)
-					{
-						sprintf_s(value_converted, "%02d", instance_hour - 12);
+					}
+					else if (instance_hour > 12) {
+						sprintf(value_converted, "%02d", instance_hour - 12);
 						retVal += value_converted;
 					}
-					else
-					{
-						sprintf_s(value_converted, "%02d", instance_hour);
+					else {
+						sprintf(value_converted, "%02d", instance_hour);
 						retVal += value_converted;
 					}
 				}
-				else if (pattern_temp == "h")
-				{
+				else if (pattern_temp == "h") {
 					int instance_hour = this->get_hour();
-					if (instance_hour == 0)
+					if (instance_hour == 0) {
 						retVal += "12";
-					else if (instance_hour > 12)
-					{
-						sprintf_s(value_converted, "%01d", instance_hour - 12);
+					}
+					else if (instance_hour > 12) {
+						sprintf(value_converted, "%01d", instance_hour - 12);
 						retVal += value_converted;
 					}
-					else
-					{
-						sprintf_s(value_converted, "%01d", instance_hour);
+					else {
+						sprintf(value_converted, "%01d", instance_hour);
 						retVal += value_converted;
 					}
 				}
-				else if (pattern_temp == "mm")
-				{
-					sprintf_s(value_converted, "%02d", this->get_minute());
+				else if (pattern_temp == "mm") {
+					sprintf(value_converted, "%02d", this->get_minute());
 					retVal += value_converted;
 				}
-				else if (pattern_temp == "m")
-				{
-					sprintf_s(value_converted, "%01d", this->get_minute());
+				else if (pattern_temp == "m") {
+					sprintf(value_converted, "%01d", this->get_minute());
 					retVal += value_converted;
 				}
-				else if (pattern_temp == "ss")
-				{
-					sprintf_s(value_converted, "%02d", this->get_second());
+				else if (pattern_temp == "ss") {
+					sprintf(value_converted, "%02d", this->get_second());
 					retVal += value_converted;
 				}
-				else if (pattern_temp == "s")
-				{
-					sprintf_s(value_converted, "%01d", this->get_second());
+				else if (pattern_temp == "s") {
+					sprintf(value_converted, "%01d", this->get_second());
 					retVal += value_converted;
 				}
-				else if (pattern_temp == "tt")
-				{
+				else if (pattern_temp == "tt") {
 					if (this->get_hour() >= 12)
 						retVal += "PM";
 					else
@@ -244,10 +228,12 @@ namespace jed_utils
 				pattern_temp = "";
 			}
 
-			if (!is_letter)
+			if (!is_letter) {
 				retVal += format[index_char];
-			else if (pattern_temp.length() == 0)
+			}
+			else if (pattern_temp.length() == 0) {
 				pattern_temp += format[index_char];
+			}
 		}
 		return string(retVal);
 
@@ -256,7 +242,7 @@ namespace jed_utils
 	string datetime::to_shortdate_string() const
 	{
 		char retVal[128] = "";
-		sprintf_s(retVal, "%d-%02d-%02d",
+		sprintf(retVal, "%d-%02d-%02d",
 			get_year(),
 			get_month(),
 			get_day());
@@ -309,14 +295,14 @@ namespace jed_utils
 		int nb_year = (int)ceil(nb_months / 12);
 		int nb_months_final = nb_months % 12;
 
-		if (timeInfo->tm_mon + nb_months_final > 11)  // tm_mon is from 0 to 11
-		{
+		if (timeInfo->tm_mon + nb_months_final > 11) { // tm_mon is from 0 to 11 
 			nb_year++;
 			nb_months_final = (timeInfo->tm_mon + nb_months_final) - 12;
 			timeInfo->tm_mon = nb_months_final;
 		}
-		else
+		else {
 			timeInfo->tm_mon += nb_months_final;
+		}
 
 		timeInfo->tm_year += nb_year;
 	}
@@ -338,15 +324,15 @@ namespace jed_utils
 
 	void datetime::add_seconds(int nb_seconds)
 	{
-		tm tm_new_time;
-		errno_t err;
+		struct tm *tm_new_time;
+		//errno_t err;
 		time_t new_seconds = mktime(timeInfo) + nb_seconds;
 		delete timeInfo;
 
-		err = localtime_s(&tm_new_time, &new_seconds);
+		tm_new_time = localtime(&new_seconds);
 
 		timeInfo = new tm();
-		_copy_from(&tm_new_time);
+		_copy_from(tm_new_time);
 	}
 
 	bool datetime::is_leapyear()
@@ -377,71 +363,74 @@ namespace jed_utils
 	{
 		int year = 1970, month = 1, day = 1, hour = 0, minute = 0, second = 0;
 
-		if (strcmp(format.c_str(), "") == 0)
+		if (strcmp(format.c_str(), "") == 0) {
 			throw invalid_argument("format");
+		}
 
 		string pattern_temp = "";
 		int pattern_firstindex = 0;
 		bool is_letter = false;
 		period day_period = period::undefined;
-		for (unsigned int index_char = 0; index_char < format.length(); index_char++)
-		{
+		for (unsigned int index_char = 0; index_char < format.length(); index_char++) {
 			//Check if the character is a valid pattern char
 			if ((format[index_char] >= 'a' && format[index_char] <= 'z') ||
-				(format[index_char] >= 'A' && format[index_char] <= 'Z'))
-			{
+				(format[index_char] >= 'A' && format[index_char] <= 'Z')) {
 				is_letter = true;
-				if (pattern_temp.length() == 0)
-				{
-
+				if (pattern_temp.length() == 0) {
 					pattern_temp += format[index_char];
 					pattern_firstindex = index_char;
 				}
 				//Check if the pattern has not changed
-				else if (format[index_char] == pattern_temp[pattern_temp.length() - 1])
+				else if (format[index_char] == pattern_temp[pattern_temp.length() - 1]) {
 					pattern_temp += format[index_char];
+				}
 			}
 			//Check if the pattern has not changed
-			if (format[index_char] != pattern_temp[pattern_temp.length() - 1] || index_char == format.length() - 1)
-			{
-				if (pattern_firstindex + pattern_temp.length() <= value.length()) //Ensure that the value if long enough
-				{
+			if (format[index_char] != pattern_temp[pattern_temp.length() - 1] || index_char == format.length() - 1) {
+				if (pattern_firstindex + pattern_temp.length() <= value.length()) { //Ensure that the value if long enough 
 					int *ptr_date_section = nullptr;
-					if (pattern_temp == "yyyy")
+					if (pattern_temp == "yyyy") {
 						ptr_date_section = &year;
-					if (pattern_temp == "MM")
+					}
+					if (pattern_temp == "MM") {
 						ptr_date_section = &month;
-					if (pattern_temp == "dd")
+					}
+					if (pattern_temp == "dd") {
 						ptr_date_section = &day;
-					if (pattern_temp == "HH")
+					}
+					if (pattern_temp == "HH") {
 						ptr_date_section = &hour;
-					if (pattern_temp == "hh")
-					{
+					}
+					if (pattern_temp == "hh") {
 						ptr_date_section = &hour;
 						day_period = period::AM; //Set default day period
 					}
-					if (pattern_temp == "mm")
+					if (pattern_temp == "mm") {
 						ptr_date_section = &minute;
-					if (pattern_temp == "ss")
-						ptr_date_section = &second;
-					if (pattern_temp == "tt") //Day period
-					{
-						string period_str = value.substr(pattern_firstindex, pattern_temp.length());
-						if (strcmpi(period_str.c_str(), "AM") == 0)
-							day_period = period::AM;
-						else if(strcmpi(period_str.c_str(), "PM") == 0)
-							day_period = period::PM;
-						else
-							throw invalid_argument("invalid value for period");
 					}
-					if (ptr_date_section != nullptr)
+					if (pattern_temp == "ss") {
+						ptr_date_section = &second;
+					}
+					if (pattern_temp == "tt") { //Day period
+						string period_str = value.substr(pattern_firstindex, pattern_temp.length());
+						if (strcmp(period_str.c_str(), "AM") == 0) {
+							day_period = period::AM;
+						}
+						else if(strcmp(period_str.c_str(), "PM") == 0) {
+							day_period = period::PM;
+						}
+						else {
+							throw invalid_argument("invalid value for period");
+						}
+					}
+					if (ptr_date_section != nullptr) {
 						*ptr_date_section = _parse_intvalue(pattern_temp, pattern_firstindex, pattern_temp.length(), value);
+					}
 				}
 				pattern_temp = "";
 			}
 
-			if (is_letter && pattern_temp.length() == 0)
-			{
+			if (is_letter && pattern_temp.length() == 0) {
 				pattern_temp += format[index_char];
 				pattern_firstindex = index_char;
 			}
@@ -470,7 +459,7 @@ namespace jed_utils
 	std::ostream& operator<<(std::ostream &os, const datetime &dt)
 	{
 		char retVal[128] = "";
-		sprintf_s(retVal, "%d-%02d-%02d %02d:%02d:%02d",
+		sprintf(retVal, "%d-%02d-%02d %02d:%02d:%02d",
 			dt.timeInfo->tm_year + 1900,
 			dt.timeInfo->tm_mon + 1,
 			dt.timeInfo->tm_mday,
@@ -522,39 +511,37 @@ namespace jed_utils
 		double difference = difftime(time_mdt, time_odt) / (60 * 60 * 24);
 		days = (int)difference;
 
-		if (mdt >= odt)
-		{
+		if (mdt >= odt) {
 			hours = mdt.get_hour() - odt.get_hour();
 			seconds = mdt.get_second() - odt.get_second();
 			minutes = mdt.get_minute() - odt.get_minute();
 		}
-		else
-		{
-			if (mdt.get_second() > odt.get_second())
-			{
+		else {
+			if (mdt.get_second() > odt.get_second()) {
 				seconds = mdt.get_second() - odt.get_second() - 60;
 				minutes += 1;
 			}
-			else
+			else {
 				seconds = mdt.get_second() - odt.get_second();
+			}
 
-			if (mdt.get_minute() > odt.get_minute())
-			{
+			if (mdt.get_minute() > odt.get_minute()) {
 				minutes += mdt.get_minute() - odt.get_minute() - 60;
 				hours += 1;
 			}
-			else
+			else {
 				minutes += mdt.get_minute() - odt.get_minute();
+			}
 
-			if (mdt.get_hour() > odt.get_hour())
-			{
+			if (mdt.get_hour() > odt.get_hour()) {
 				hours += mdt.get_hour() - odt.get_hour() - 24;
 			}
-			else
+			else {
 				hours += mdt.get_hour() - odt.get_hour();
+			}
 		}
 
 		timespan retVal(days, hours, minutes, seconds);
 		return retVal;
 	}
-}
+} // namespace jed_utils

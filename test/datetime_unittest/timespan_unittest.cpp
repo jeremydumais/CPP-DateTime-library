@@ -1,4 +1,4 @@
-#include "..\..\include\datetime.h"
+#include "../../src/datetime.h"
 #include <iostream>
 #include <assert.h>
 #include <cstring>
@@ -241,18 +241,4 @@ void test_timespan_operator_not_equal()
 	assert(timespan(1, 2, 3, 4) != timespan(1, 2, 2, 4));
 	assert(timespan(1, 2, 3, 4) != timespan(1, 1, 3, 4));
 	assert(timespan(1, 2, 3, 4) != timespan(0, 2, 3, 4));
-}
-
-void timespan_unittest()
-{
-	test_timespan_constructor();
-	test_timespan_get_total_seconds();
-	test_timespan_get_total_minutes();
-	test_timespan_get_total_hours();
-	test_timespan_operator_less();
-	test_timespan_operator_less_equal();
-	test_timespan_operator_greater();
-	test_timespan_operator_greater_equal();
-	test_timespan_operator_equal();
-	test_timespan_operator_not_equal();
 }

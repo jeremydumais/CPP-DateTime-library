@@ -1,20 +1,23 @@
-#include "../Include/timespan.h"
+#include "timespan.h"
 #include <stdexcept>
 
 using namespace std;
 
-namespace jed_utils
+namespace jed_utils 
 {
 	timespan::timespan(int days, int hours, int minutes, int seconds)
 		//days(days), hours(hours), minutes(minutes), seconds(seconds)
 	{
 		//Check if the values submitted is valid
-		if (hours < -23 || hours > 23)
+		if (hours < -23 || hours > 23) {
 			throw std::invalid_argument("hours must be between 0 and 23");
-		if (minutes < -59 || minutes > 59)
+		}
+		if (minutes < -59 || minutes > 59) {
 			throw std::invalid_argument("minutes must be between 0 and 59");
-		if (seconds < -59 || seconds > 59)
+		}
+		if (seconds < -59 || seconds > 59) {
 			throw std::invalid_argument("seconds must be between 0 and 59");
+		}
 		this->days = days;
 		this->hours = hours;
 		this->minutes = minutes;
@@ -58,28 +61,33 @@ namespace jed_utils
 
 	bool operator<(const timespan &mts, const timespan &ots)
 	{
-		if (mts.days < ots.days)
+		if (mts.days < ots.days) {
 			return true;
-		else if (mts.days > ots.days)
+		}
+		else if (mts.days > ots.days) {
 			return false;
-		else
-		{
-			if (mts.hours < ots.hours)
+		}
+		else {
+			if (mts.hours < ots.hours) {
 				return true;
-			else if (mts.hours > ots.hours)
+			}
+			else if (mts.hours > ots.hours) {
 				return false;
-			else
-			{
-				if (mts.minutes < ots.minutes)
+			}
+			else {
+				if (mts.minutes < ots.minutes) {
 					return true;
-				else if (mts.minutes > ots.minutes)
+				}
+				else if (mts.minutes > ots.minutes) {
 					return false;
-				else
-				{
-					if (mts.seconds < ots.seconds)
+				}
+				else {
+					if (mts.seconds < ots.seconds) {
 						return true;
-					else
+					}
+					else {
 						return false;
+					}
 				}
 			}
 		}
@@ -112,4 +120,4 @@ namespace jed_utils
 	{
 		return !(mts == ots);
 	}
-}
+} // namespace jed_utils
