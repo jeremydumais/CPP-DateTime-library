@@ -4,6 +4,8 @@
 
 /.vs/datetime/v14
 /Debug
+/build
+/.vscode
 /test/datetime_unittest/Debug
 /test/datetime_unittest/x64/Debug
 /x64/Debug

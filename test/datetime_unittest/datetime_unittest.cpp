@@ -251,76 +251,110 @@ TEST(datetime_to_string, ValidDate3_ReturnOK)
 	ASSERT_STREQ(dtTest.to_string().c_str(), "2015-02-14 11:55:45");
 }
 
-void test_to_shortdate_string()
+TEST(datetime_to_shortdate_string, ValidDate1_ReturnOK)
 {
 	datetime dtTest = datetime(2015, 02, 14);
-	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-02-14") == 0);
-
-	dtTest = datetime(2015, 02, 14, 11, 7, 2);
-	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-02-14") == 0);
-
-	dtTest = datetime(2015, 02, 14, 11, 55, 45);
-	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-02-14") == 0);
+	ASSERT_STREQ(dtTest.to_shortdate_string().c_str(), "2015-02-14");
 }
 
-void test_add_days()
+TEST(datetime_to_shortdate_string, ValidDate2_ReturnOK)
+{
+	datetime dtTest = datetime(2015, 02, 14, 11, 7, 2);
+	ASSERT_STREQ(dtTest.to_shortdate_string().c_str(), "2015-02-14");
+}
+
+TEST(datetime_to_shortdate_string, ValidDate3_ReturnOK)
+{
+	datetime dtTest = datetime(2015, 02, 14, 11, 55, 45);
+	ASSERT_STREQ(dtTest.to_shortdate_string().c_str(), "2015-02-14");
+}
+
+TEST(datetime_add_days, Add2Days_ReturnOK)
 {
 	datetime dtTest = datetime(2015, 02, 14);
 	dtTest.add_days(2);
-
-	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-02-16") == 0);
-
-	dtTest = datetime(2015, 02, 27, 11, 7, 2);
-	dtTest.add_days(5);
-	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-03-04") == 0);
-
-	dtTest = datetime(2015, 02, 02, 11, 7, 2);
-	dtTest.add_days(-3);
-	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-01-30") == 0);
+	ASSERT_STREQ(dtTest.to_shortdate_string().c_str(), "2015-02-16");
 }
 
-void test_add_months()
+TEST(datetime_add_days, Add5Days_ReturnOK)
+{
+	datetime dtTest = datetime(2015, 02, 27, 11, 7, 2);
+	dtTest.add_days(5);
+	ASSERT_STREQ(dtTest.to_shortdate_string().c_str(), "2015-03-04");
+}
+
+TEST(datetime_add_days, AddMinus3Days_ReturnOK)
+{
+	datetime dtTest = datetime(2015, 02, 02, 11, 7, 2);
+	dtTest.add_days(-3);
+	ASSERT_STREQ(dtTest.to_shortdate_string().c_str(), "2015-01-30");
+}
+
+TEST(datetime_add_months, Add2Months_ReturnOK)
 {
 	datetime dtTest = datetime(2015, 02, 14);
 	dtTest.add_months(2);
-	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-04-14") == 0);
-
-	dtTest = datetime(2015, 04, 14);
-	dtTest.add_months(-2);
-	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2015-02-14") == 0);
-
-	dtTest = datetime(2015, 11, 14);
-	dtTest.add_months(3);
-	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2016-02-14") == 0);
-
-	dtTest = datetime(2015, 11, 14);
-	dtTest.add_months(23);
-	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2017-10-14") == 0);
-
-	dtTest = datetime(2015, 11, 14);
-	dtTest.add_months(-13);
-	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2014-10-14") == 0);
+	ASSERT_STREQ(dtTest.to_shortdate_string().c_str(), "2015-04-14");
 }
 
-void test_add_years()
+TEST(datetime_add_months, AddMinus2Months_ReturnOK)
+{
+	datetime dtTest = datetime(2015, 04, 14);
+	dtTest.add_months(-2);
+	ASSERT_STREQ(dtTest.to_shortdate_string().c_str(), "2015-02-14");
+}
+
+TEST(datetime_add_months, Add3Months_ReturnOK)
+{
+	datetime dtTest = datetime(2015, 11, 14);
+	dtTest.add_months(3);
+	ASSERT_STREQ(dtTest.to_shortdate_string().c_str(), "2016-02-14");
+}
+
+TEST(datetime_add_months, Add23Months_ReturnOK)
+{
+	datetime dtTest = datetime(2015, 11, 14);
+	dtTest.add_months(23);
+	ASSERT_STREQ(dtTest.to_shortdate_string().c_str(), "2017-10-14");
+}
+
+TEST(datetime_add_months, AddMinus13Months_ReturnOK)
+{
+	datetime dtTest = datetime(2015, 11, 14);
+	dtTest.add_months(-13);
+	ASSERT_STREQ(dtTest.to_shortdate_string().c_str(), "2014-10-14");
+}
+
+TEST(datetime_add_years, Add2Years_ReturnOK)
 {
 	datetime dtTest = datetime(2015, 02, 14);
 	dtTest.add_years(2);
-	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2017-02-14") == 0);
-
-	dtTest = datetime(2015, 02, 14);
-	dtTest.add_years(-2);
-	assert(strcmp(dtTest.to_shortdate_string().c_str(), "2013-02-14") == 0);
+	ASSERT_STREQ(dtTest.to_shortdate_string().c_str(), "2017-02-14");
 }
 
-void test_is_leapyear()
+TEST(datetime_add_years, AddMinus2Years_ReturnOK)
+{
+	datetime dtTest = datetime(2015, 02, 14);
+	dtTest.add_years(-2);
+	ASSERT_STREQ(dtTest.to_shortdate_string().c_str(), "2013-02-14");
+}
+
+TEST(datetime_is_leapyear, Year2000_ReturnOK)
 {
 	datetime dtTest(2000, 01, 01);
-	assert(dtTest.is_leapyear());
-	dtTest = datetime(2004, 01, 01);
-	assert(dtTest.is_leapyear());
-	dtTest = datetime(1700, 01, 01);
-	assert(!dtTest.is_leapyear());
+	ASSERT_TRUE(dtTest.is_leapyear());
+}
+
+TEST(datetime_is_leapyear, Year2004_ReturnOK)
+{
+	datetime dtTest(2004, 01, 01);
+	ASSERT_TRUE(dtTest.is_leapyear());
+}
+
+TEST(datetime_is_leapyear, Year1700_ReturnOK)
+{
+	datetime dtTest(1700, 01, 01);
+	ASSERT_FALSE(dtTest.is_leapyear());
 }
 
 void test_add_hours()
