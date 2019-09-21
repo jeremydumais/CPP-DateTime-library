@@ -762,241 +762,298 @@ TEST(datetime_parse, ValueWithHourMinus1_ThrowInvalidArgumentException)
 	catch (...) { FAIL(); }
 }
 
-void test_parse()
+TEST(datetime_parse, hh01WithoutAMPMDesignator_ReturnOK)
 {
-datetime dtTest;
-	//Test hh 01 without AM/PM designator
-	dtTest = datetime::parse(string("yyyyMMddhhmmss"), string("20160818011442"));
-	assert(dtTest.get_year() == 2016);
-	assert(dtTest.get_month() == 8);
-	assert(dtTest.get_day() == 18);
-	assert(dtTest.get_hour() == 1);
-	assert(dtTest.get_minute() == 14);
-	assert(dtTest.get_second() == 42);
-
-	//Test hh 12 without AM/PM designator
-	dtTest = datetime::parse(string("yyyyMMddhhmmss"), string("20160818121442"));
-	assert(dtTest.get_year() == 2016);
-	assert(dtTest.get_month() == 8);
-	assert(dtTest.get_day() == 18);
-	assert(dtTest.get_hour() == 0);
-	assert(dtTest.get_minute() == 14);
-	assert(dtTest.get_second() == 42);
-
-	//Test hh 00 without AM/PM designator
-	try
-	{
-		dtTest = datetime::parse(string("yyyyMMddhhmmss"), string("20160818001442"));
-		assert(false);
-	}
-	catch (invalid_argument& err)
-	{
-		assert(strcmp(err.what(), "hour must be between 1 and 12") == 0);
-	}
-	catch (...) { assert(false); }
-
-	//Test hh 13 without AM/PM designator
-	try
-	{
-		dtTest = datetime::parse(string("yyyyMMddhhmmss"), string("20160818131442"));
-		assert(false);
-	}
-	catch (invalid_argument& err)
-	{
-		assert(strcmp(err.what(), "hour must be between 1 and 12") == 0);
-	}
-	catch (...) { assert(false); }
-
-	//Test hh 12 without AM/PM designator
-	dtTest = datetime::parse(string("yyyyMMddhhmmss"), string("20160818121442"));
-	assert(dtTest.get_year() == 2016);
-	assert(dtTest.get_month() == 8);
-	assert(dtTest.get_day() == 18);
-	assert(dtTest.get_hour() == 0);
-	assert(dtTest.get_minute() == 14);
-	assert(dtTest.get_second() == 42);
-
-	//Test hh 11 without AM/PM designator
-	dtTest = datetime::parse(string("yyyyMMddhhmmss"), string("20160818111442"));
-	assert(dtTest.get_year() == 2016);
-	assert(dtTest.get_month() == 8);
-	assert(dtTest.get_day() == 18);
-	assert(dtTest.get_hour() == 11);
-	assert(dtTest.get_minute() == 14);
-	assert(dtTest.get_second() == 42);
-
-	//Test hh 1 without AM/PM designator
-	dtTest = datetime::parse(string("yyyyMMddhhmmss"), string("20160818011442"));
-	assert(dtTest.get_year() == 2016);
-	assert(dtTest.get_month() == 8);
-	assert(dtTest.get_day() == 18);
-	assert(dtTest.get_hour() == 1);
-	assert(dtTest.get_minute() == 14);
-	assert(dtTest.get_second() == 42);
-
-	//Test hh 1 AM
-	dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818011442AM"));
-	assert(dtTest.get_year() == 2016);
-	assert(dtTest.get_month() == 8);
-	assert(dtTest.get_day() == 18);
-	assert(dtTest.get_hour() == 1);
-	assert(dtTest.get_minute() == 14);
-	assert(dtTest.get_second() == 42);
-
-	//Test hh 1 PM
-	dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818011442PM"));
-	assert(dtTest.get_year() == 2016);
-	assert(dtTest.get_month() == 8);
-	assert(dtTest.get_day() == 18);
-	assert(dtTest.get_hour() == 13);
-	assert(dtTest.get_minute() == 14);
-	assert(dtTest.get_second() == 42);
-
-	//Test hh 12 PM
-	dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818121442PM"));
-	assert(dtTest.get_year() == 2016);
-	assert(dtTest.get_month() == 8);
-	assert(dtTest.get_day() == 18);
-	assert(dtTest.get_hour() == 12);
-	assert(dtTest.get_minute() == 14);
-	assert(dtTest.get_second() == 42);
-
-	//Test hh 11 PM
-	dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818111442PM"));
-	assert(dtTest.get_year() == 2016);
-	assert(dtTest.get_month() == 8);
-	assert(dtTest.get_day() == 18);
-	assert(dtTest.get_hour() == 23);
-	assert(dtTest.get_minute() == 14);
-	assert(dtTest.get_second() == 42);
-
-	//Test hh 13 with invalide period
-	try
-	{
-		dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818111442EM"));
-		assert(false);
-	}
-	catch (invalid_argument& err)
-	{
-		assert(strcmp(err.what(), "invalid value for period") == 0);
-	}
-	catch (...) { assert(false); }
+	datetime dtTest = datetime::parse(string("yyyyMMddhhmmss"), string("20160818011442"));
+	ASSERT_EQ(2016, dtTest.get_year());
+	ASSERT_EQ(8, dtTest.get_month());
+	ASSERT_EQ(18, dtTest.get_day());
+	ASSERT_EQ(1, dtTest.get_hour());
+	ASSERT_EQ(14, dtTest.get_minute());
+	ASSERT_EQ(42, dtTest.get_second());
 }
 
-void test_tostring_format()
+TEST(datetime_parse, hh12WithoutAMPMDesignator_ReturnOK)
 {
-	try
+	datetime dtTest = datetime::parse(string("yyyyMMddhhmmss"), string("20160818121442"));
+	ASSERT_EQ(2016, dtTest.get_year());
+	ASSERT_EQ(8, dtTest.get_month());
+	ASSERT_EQ(18, dtTest.get_day());
+	ASSERT_EQ(0, dtTest.get_hour());
+	ASSERT_EQ(14, dtTest.get_minute());
+	ASSERT_EQ(42, dtTest.get_second());
+}
+
+TEST(datetime_parse, hh00WithoutAMPMDesignator_ThrowInvalidArgumentException)
+{
+	try 
+	{
+		datetime dtTest = datetime::parse(string("yyyyMMddhhmmss"), string("20160818001442"));
+		FAIL();
+	}
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "hour must be between 1 and 12"); 
+	}
+	catch (...) { FAIL(); }
+}
+
+TEST(datetime_parse, hh13WithoutAMPMDesignator_ThrowInvalidArgumentException)
+{
+	try 
+	{
+		datetime dtTest = datetime::parse(string("yyyyMMddhhmmss"), string("20160818131442"));
+		FAIL();
+	}
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "hour must be between 1 and 12"); 
+	}
+	catch (...) { FAIL(); }
+}
+
+TEST(datetime_parse, hh11WithoutAMPMDesignator_ReturnOK)
+{
+	datetime dtTest = datetime::parse(string("yyyyMMddhhmmss"), string("20160818111442"));
+	ASSERT_EQ(2016, dtTest.get_year());
+	ASSERT_EQ(8, dtTest.get_month());
+	ASSERT_EQ(18, dtTest.get_day());
+	ASSERT_EQ(11, dtTest.get_hour());
+	ASSERT_EQ(14, dtTest.get_minute());
+	ASSERT_EQ(42, dtTest.get_second());
+}
+
+TEST(datetime_parse, hh1WithoutAMPMDesignator_ReturnOK)
+{
+	datetime dtTest = datetime::parse(string("yyyyMMddhhmmss"), string("20160818011442"));
+	ASSERT_EQ(2016, dtTest.get_year());
+	ASSERT_EQ(8, dtTest.get_month());
+	ASSERT_EQ(18, dtTest.get_day());
+	ASSERT_EQ(1, dtTest.get_hour());
+	ASSERT_EQ(14, dtTest.get_minute());
+	ASSERT_EQ(42, dtTest.get_second());
+}
+
+TEST(datetime_parse, hh1AM_ReturnOK)
+{
+	datetime dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818011442AM"));
+	ASSERT_EQ(2016, dtTest.get_year());
+	ASSERT_EQ(8, dtTest.get_month());
+	ASSERT_EQ(18, dtTest.get_day());
+	ASSERT_EQ(1, dtTest.get_hour());
+	ASSERT_EQ(14, dtTest.get_minute());
+	ASSERT_EQ(42, dtTest.get_second());
+}
+
+TEST(datetime_parse, hh1PM_ReturnOK)
+{
+	datetime dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818011442PM"));
+	ASSERT_EQ(2016, dtTest.get_year());
+	ASSERT_EQ(8, dtTest.get_month());
+	ASSERT_EQ(18, dtTest.get_day());
+	ASSERT_EQ(13, dtTest.get_hour());
+	ASSERT_EQ(14, dtTest.get_minute());
+	ASSERT_EQ(42, dtTest.get_second());
+}
+
+TEST(datetime_parse, hh12PM_ReturnOK)
+{
+	datetime dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818121442PM"));
+	ASSERT_EQ(2016, dtTest.get_year());
+	ASSERT_EQ(8, dtTest.get_month());
+	ASSERT_EQ(18, dtTest.get_day());
+	ASSERT_EQ(12, dtTest.get_hour());
+	ASSERT_EQ(14, dtTest.get_minute());
+	ASSERT_EQ(42, dtTest.get_second());
+}
+
+TEST(datetime_parse, hh11PM_ReturnOK)
+{
+	datetime dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818111442PM"));
+	ASSERT_EQ(2016, dtTest.get_year());
+	ASSERT_EQ(8, dtTest.get_month());
+	ASSERT_EQ(18, dtTest.get_day());
+	ASSERT_EQ(23, dtTest.get_hour());
+	ASSERT_EQ(14, dtTest.get_minute());
+	ASSERT_EQ(42, dtTest.get_second());
+}
+
+TEST(datetime_parse, hh13WithInvalidAMPMDesignator_ThrowInvalidArgumentException)
+{
+	try 
+	{
+		datetime dtTest = datetime::parse(string("yyyyMMddhhmmsstt"), string("20160818111442EM"));
+		FAIL();
+	}
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "invalid value for period"); 
+	}
+	catch (...) { FAIL(); }
+}
+
+TEST(datetime_to_string, EmptyFormat_ThrowInvalidArgumentException)
+{
+	try 
 	{
 		datetime dtTest = datetime();
 		dtTest.to_string("");
-		assert(false);
+		FAIL();
 	}
-	catch (invalid_argument& err)
-	{
-		assert(strcmp(err.what(), "format") == 0);
+	catch (const std::invalid_argument e) {
+		ASSERT_STREQ(e.what(), "format"); 
 	}
-	catch (...) { assert(false); }
-
-	datetime dtTest = datetime(2015, 10, 14, 15, 12, 13);
-	assert(dtTest.to_string("/02-yyyy/MM-dd") == "/02-2015/10-14");
-	assert(dtTest.to_string("yyyy-MM-dd") == "2015-10-14");
-	assert(dtTest.to_string("yyyy-M-d") == "2015-10-14");
-	assert(dtTest.to_string("yyyy MM dd") == "2015 10 14");
-	assert(dtTest.to_string("dd/MM/yyyy") == "14/10/2015");
-	assert(dtTest.to_string("yyyy") == "2015");
-	assert(dtTest.to_string("MM") == "10");
-	assert(dtTest.to_string("dd") == "14");
-	assert(dtTest.to_string("yyyy-MM-dd HH:mm:ss") == "2015-10-14 15:12:13");
-	assert(dtTest.to_string("yyyy-MM-dd hh:mm:ss tt") == "2015-10-14 03:12:13 PM");
-	assert(dtTest.to_string("yyyy-MM-dd h:mm:ss tt") == "2015-10-14 3:12:13 PM");
-	assert(dtTest.to_string("yyyy-MM-dd H:m:s") == "2015-10-14 15:12:13");
-	assert(dtTest.to_string("HH:mm:ss") == "15:12:13");
-	assert(dtTest.to_string("aaaa") == ""); //Invalid format
-	assert(dtTest.to_string("aaaa-ii") == "-"); //Invalid format
-	assert(dtTest.to_string("yyyy-MM-dd HH:mm:ss tt") == "2015-10-14 15:12:13 PM");
-
-	dtTest = datetime(2015, 2, 5, 1, 2, 3);
-	assert(dtTest.to_string("yyyy-M-d") == "2015-2-5");
-	assert(dtTest.to_string("yyyy-MM-dd") == "2015-02-05");
-	assert(dtTest.to_string("yyyy-MM-dd H:m:s") == "2015-02-05 1:2:3");
-	assert(dtTest.to_string("yyyy-MM-dd HH:mm:ss tt") == "2015-02-05 01:02:03 AM");
-	assert(dtTest.to_string("yyyy-MM-dd hh:mm:ss tt") == "2015-02-05 01:02:03 AM");
-	assert(dtTest.to_string("yyyy-MM-dd h:mm:ss tt") == "2015-02-05 1:02:03 AM");
-
-	dtTest = datetime(2015, 2, 5, 0, 0, 0);
-	assert(dtTest.to_string("yyyy-MM-dd hh:mm:ss tt") == "2015-02-05 12:00:00 AM");
-	assert(dtTest.to_string("yyyy-MM-dd h:mm:ss tt") == "2015-02-05 12:00:00 AM");
-	assert(dtTest.to_string("yy-MM-dd h:mm:ss tt") == "15-02-05 12:00:00 AM"); //Format yy
-
-	dtTest = datetime(1913, 2, 5, 0, 0, 0);
-	assert(dtTest.to_string("yy/MM/dd h:mm:ss tt") == "13/02/05 12:00:00 AM"); //Format yy
+	catch (...) { FAIL(); }
 }
 
-void test_operator_minus()
+TEST(datetime_to_string, MultipleTests20151014151213_ReturnOK)
+{
+	datetime dtTest = datetime(2015, 10, 14, 15, 12, 13);
+	ASSERT_STREQ(dtTest.to_string("/02-yyyy/MM-dd").c_str(), "/02-2015/10-14");
+	ASSERT_STREQ(dtTest.to_string("yyyy-MM-dd").c_str(), "2015-10-14");
+	ASSERT_STREQ(dtTest.to_string("yyyy-M-d").c_str(), "2015-10-14");
+	ASSERT_STREQ(dtTest.to_string("yyyy MM dd").c_str(), "2015 10 14");
+	ASSERT_STREQ(dtTest.to_string("dd/MM/yyyy").c_str(), "14/10/2015");
+	ASSERT_STREQ(dtTest.to_string("yyyy").c_str(), "2015");
+	ASSERT_STREQ(dtTest.to_string("MM").c_str(), "10");
+	ASSERT_STREQ(dtTest.to_string("dd").c_str(), "14");
+	ASSERT_STREQ(dtTest.to_string("yyyy-MM-dd HH:mm:ss").c_str(), "2015-10-14 15:12:13");
+	ASSERT_STREQ(dtTest.to_string("yyyy-MM-dd hh:mm:ss tt").c_str(), "2015-10-14 03:12:13 PM");
+	ASSERT_STREQ(dtTest.to_string("yyyy-MM-dd h:mm:ss tt").c_str(), "2015-10-14 3:12:13 PM");
+	ASSERT_STREQ(dtTest.to_string("yyyy-MM-dd H:m:s").c_str(), "2015-10-14 15:12:13");
+	ASSERT_STREQ(dtTest.to_string("HH:mm:ss").c_str(), "15:12:13");
+	ASSERT_STREQ(dtTest.to_string("aaaa").c_str(), ""); //Invalid format
+	ASSERT_STREQ(dtTest.to_string("aaaa-ii").c_str(), "-"); //Invalid format
+	ASSERT_STREQ(dtTest.to_string("yyyy-MM-dd HH:mm:ss tt").c_str(), "2015-10-14 15:12:13 PM");
+}
+
+TEST(datetime_to_string, MultipleTests201525123_ReturnOK)
+{
+	datetime dtTest = datetime(2015, 2, 5, 1, 2, 3);
+	ASSERT_STREQ(dtTest.to_string("yyyy-M-d").c_str(), "2015-2-5");
+	ASSERT_STREQ(dtTest.to_string("yyyy-MM-dd").c_str(), "2015-02-05");
+	ASSERT_STREQ(dtTest.to_string("yyyy-MM-dd H:m:s").c_str(), "2015-02-05 1:2:3");
+	ASSERT_STREQ(dtTest.to_string("yyyy-MM-dd HH:mm:ss tt").c_str(), "2015-02-05 01:02:03 AM");
+	ASSERT_STREQ(dtTest.to_string("yyyy-MM-dd hh:mm:ss tt").c_str(), "2015-02-05 01:02:03 AM");
+	ASSERT_STREQ(dtTest.to_string("yyyy-MM-dd h:mm:ss tt").c_str(), "2015-02-05 1:02:03 AM");
+}
+
+TEST(datetime_to_string, MultipleTests201525000_ReturnOK)
+{
+	datetime dtTest = datetime(2015, 2, 5, 0, 0, 0);
+	ASSERT_STREQ(dtTest.to_string("yyyy-MM-dd hh:mm:ss tt").c_str(), "2015-02-05 12:00:00 AM");
+	ASSERT_STREQ(dtTest.to_string("yyyy-MM-dd h:mm:ss tt").c_str(), "2015-02-05 12:00:00 AM");
+	ASSERT_STREQ(dtTest.to_string("yy-MM-dd h:mm:ss tt").c_str(), "15-02-05 12:00:00 AM"); //Format yy
+}
+
+TEST(datetime_to_string, Test191325000_ReturnOK)
+{
+	datetime dtTest = datetime(1913, 2, 5, 0, 0, 0);
+	ASSERT_STREQ(dtTest.to_string("yy/MM/dd h:mm:ss tt").c_str(), "13/02/05 12:00:00 AM"); //Format yy
+}
+
+TEST(datetime_operator_minus, Difference6Days_ReturnOK)
 {
 	datetime date1(2016, 12, 31);
 	datetime date2(2016, 12, 25);
 	timespan ts1 = date1 - date2;
-	assert(ts1.get_days() == 6);
-	date1 = datetime(2016, 12, 31, 11, 0, 0);
-	date2 = datetime(2016, 12, 25, 13, 0, 0);
-	ts1 = date2 - date1;
-	assert(ts1.get_days() == -5);
-	assert(ts1.get_hours() == -22);
-	date1 = datetime(2016, 12, 31, 11, 55, 12);
-	date2 = datetime(2016, 12, 25, 13, 32, 5);
-	ts1 = date2 - date1;
-	assert(ts1.get_days() == -5);
-	assert(ts1.get_hours() == -22);
-	assert(ts1.get_minutes() == -23);
-	assert(ts1.get_seconds() == -7);
-	date1 = datetime(2016, 12, 31, 11, 32, 5);
-	date2 = datetime(2016, 12, 25, 13, 55, 12);
-	ts1 = date2 - date1;
-	assert(ts1.get_days() == -5);
-	assert(ts1.get_hours() == -21);
-	assert(ts1.get_minutes() == -36);
-	assert(ts1.get_seconds() == -53);
-	date1 = datetime(2016, 12, 31, 13, 32, 5);
-	date2 = datetime(2016, 12, 25, 11, 55, 12);
-	ts1 = date2 - date1;
-	assert(ts1.get_days() == -6);
-	assert(ts1.get_hours() == -1);
-	assert(ts1.get_minutes() == -36);
-	assert(ts1.get_seconds() == -53);
-	date1 = datetime(2016, 12, 31);
-	date2 = datetime(2016, 11, 25);
-	ts1 = date2 - date1;
-	assert(ts1.get_days() == -36);
-	assert(ts1.get_hours() == 0);
-	assert(ts1.get_minutes() == 0);
-	assert(ts1.get_seconds() == 0);
-	date1 = datetime(2016, 12, 31);
-	date2 = datetime(2015, 11, 25);
-	ts1 = date2 - date1;
-	assert(ts1.get_days() == -402);
-	assert(ts1.get_hours() == 0);
-	assert(ts1.get_minutes() == 0);
-	assert(ts1.get_seconds() == 0);
-	date1 = datetime(2016, 11, 25);
-	date2 = datetime(2016, 12, 5);
-	ts1 = date2 - date1;
+	ASSERT_EQ(ts1.get_days(), 6);
+}
+
+TEST(datetime_operator_minus, DifferenceMinus5DaysMinus22Hours_ReturnOK)
+{
+	datetime date1 = datetime(2016, 12, 31, 11, 0, 0);
+	datetime date2 = datetime(2016, 12, 25, 13, 0, 0);
+	timespan ts1 = date2 - date1;
+	ASSERT_EQ(ts1.get_days(), -5);
+	ASSERT_EQ(ts1.get_hours(), -22);
+}
+
+TEST(datetime_operator_minus, DifferenceMinus5DaysMinus22HoursMinus23MinsMinus7Secs_ReturnOK)
+{
+	datetime date1 = datetime(2016, 12, 31, 11, 55, 12);
+	datetime date2 = datetime(2016, 12, 25, 13, 32, 5);
+	timespan ts1 = date2 - date1;
+	ASSERT_EQ(ts1.get_days(), -5);
+	ASSERT_EQ(ts1.get_hours(), -22);
+	ASSERT_EQ(ts1.get_minutes(), -23);
+	ASSERT_EQ(ts1.get_seconds(), -7);
+}
+
+TEST(datetime_operator_minus, DifferenceMinus5DaysMinus21HoursMinus36MinsMinus53Secs_ReturnOK)
+{
+	datetime date1 = datetime(2016, 12, 31, 11, 32, 5);
+	datetime date2 = datetime(2016, 12, 25, 13, 55, 12);
+	timespan ts1 = date2 - date1;
+	ASSERT_EQ(ts1.get_days(), -5);
+	ASSERT_EQ(ts1.get_hours(), -21);
+	ASSERT_EQ(ts1.get_minutes(), -36);
+	ASSERT_EQ(ts1.get_seconds(), -53);
+}
+
+TEST(datetime_operator_minus, DifferenceMinus6DaysMinus1HoursMinus36MinsMinus53Secs_ReturnOK)
+{
+	datetime date1 = datetime(2016, 12, 31, 13, 32, 5);
+	datetime date2 = datetime(2016, 12, 25, 11, 55, 12);
+	timespan ts1 = date2 - date1;
+	ASSERT_EQ(ts1.get_days(), -6);
+	ASSERT_EQ(ts1.get_hours(), -1);
+	ASSERT_EQ(ts1.get_minutes(), -36);
+	ASSERT_EQ(ts1.get_seconds(), -53);
+}
+
+TEST(datetime_operator_minus, DifferenceMinus36Days0Hours0Mins0Secs_ReturnOK)
+{
+	datetime date1 = datetime(2016, 12, 31);
+	datetime date2 = datetime(2016, 11, 25);
+	timespan ts1 = date2 - date1;
+	ASSERT_EQ(ts1.get_days(), -36);
+	ASSERT_EQ(ts1.get_hours(), 0);
+	ASSERT_EQ(ts1.get_minutes(), 0);
+	ASSERT_EQ(ts1.get_seconds(), 0);
+}
+
+TEST(datetime_operator_minus, DifferenceMinus402Days0Hours0Mins0Secs_ReturnOK)
+{
+	datetime date1 = datetime(2016, 12, 31);
+	datetime date2 = datetime(2015, 11, 25);
+	timespan ts1 = date2 - date1;
+	ASSERT_EQ(ts1.get_days(), -402);
+	ASSERT_EQ(ts1.get_hours(), 0);
+	ASSERT_EQ(ts1.get_minutes(), 0);
+	ASSERT_EQ(ts1.get_seconds(), 0);
+}
+
+TEST(datetime_operator_minus, Difference10Days0Hours0Mins0Secs_ReturnOK)
+{
+	datetime date1 = datetime(2016, 11, 25);
+	datetime date2 = datetime(2016, 12, 5);
+	timespan ts1 = date2 - date1;
 	assert(ts1.get_days() == 10);
 	assert(ts1.get_hours() == 0);
 	assert(ts1.get_minutes() == 0);
 	assert(ts1.get_seconds() == 0);
-	date1 = datetime(2016, 12, 31, 7, 32, 5);
-	date2 = datetime(2016, 12, 31, 14, 55, 12);
-	ts1 = date2 - date1;
+}
+
+TEST(datetime_operator_minus, Difference0Days7Hours23Mins7Secs_ReturnOK)
+{
+	datetime date1 = datetime(2016, 12, 31, 7, 32, 5);
+	datetime date2 = datetime(2016, 12, 31, 14, 55, 12);
+	timespan ts1 = date2 - date1;
 	assert(ts1.get_days() == 0);
 	assert(ts1.get_hours() == 7);
 	assert(ts1.get_minutes() == 23);
 	assert(ts1.get_seconds() == 7);
 }
 
-void test_static_is_leapyear()
+TEST(datetime_static_is_leapyear, Year2000_ReturnTrue)
 {
-	assert(datetime::is_leapyear(2000));
-	assert(datetime::is_leapyear(2004));
-	assert(!datetime::is_leapyear(1700));
+	ASSERT_TRUE(datetime::is_leapyear(2000));
+}
+
+TEST(datetime_static_is_leapyear, Year2004_ReturnTrue)
+{
+	ASSERT_TRUE(datetime::is_leapyear(2004));
+}
+
+TEST(datetime_static_is_leapyear, Year1700_ReturnFalse)
+{
+	ASSERT_FALSE(datetime::is_leapyear(1700));
 }
