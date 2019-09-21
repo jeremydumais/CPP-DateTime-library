@@ -6,11 +6,12 @@ namespace jed_utils
 {
 	//Default constructor get current date and time
 	datetime::datetime()
+		: timeInfo(new tm())
 	{
 		time_t rawtime;
-
 		time (&rawtime);
-		timeInfo = localtime(&rawtime);
+		struct tm *tm_now = localtime(&rawtime);
+		_copy_from(tm_now);
 	}
 
 	datetime::datetime(int year, int month, int day, int hour, int minute, int second, period day_period)
@@ -79,7 +80,8 @@ namespace jed_utils
 		_copy_from(other.timeInfo);
 	}
 
-	const datetime& datetime::operator=(const datetime &dt)
+	//Copy assignment
+	datetime& datetime::operator=(const datetime &dt)
 	{
 		if (this != &dt) {
 			_copy_from(dt.timeInfo);
@@ -90,6 +92,30 @@ namespace jed_utils
 	datetime::~datetime()
 	{
 		delete timeInfo;
+	}
+
+	//Move constructor
+	datetime::datetime(datetime&& other) noexcept
+		: timeInfo(other.timeInfo)
+	{
+		// Release the data pointer from the source object so that the destructor 
+		// does not free the memory multiple times.
+		other.timeInfo = nullptr;
+	}
+
+	//Move assignement operator
+	datetime& datetime::operator=(datetime&& other) noexcept
+	{
+		if (this != &other)
+		{
+			delete timeInfo;
+			// Copy the data pointer and its length from the source object.
+			timeInfo = other.timeInfo;
+			// Release the data pointer from the source object so that
+			// the destructor does not free the memory multiple times.
+			other.timeInfo = nullptr;
+		}
+		return *this;
 	}
 
 	bool datetime::_is_leapyear(int year) const

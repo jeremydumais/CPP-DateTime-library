@@ -31,8 +31,10 @@ namespace jed_utils
 	public:
 		datetime();
 		datetime(int year, int month, int day, int hour = 0, int minute = 0, int second = 0, period day_period = period::undefined);
-		datetime(const datetime&);
-		const datetime& operator=(const datetime &dt);
+		datetime(const datetime&); //Copy constructor
+		datetime& operator=(const datetime &dt); //Copy assignment
+		datetime(datetime&& other) noexcept; //Move constructor
+		datetime& operator=(datetime&& other) noexcept; //Move assignement
 		virtual ~datetime();
 		friend std::ostream& operator<<(std::ostream &os, const datetime &dt);
 		DATETIME_API friend bool operator<(const datetime &mdt, const datetime &odt);
