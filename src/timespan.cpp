@@ -64,33 +64,26 @@ namespace jed_utils
 		if (mts.days < ots.days) {
 			return true;
 		}
-		else if (mts.days > ots.days) {
+		if (mts.days > ots.days) {
 			return false;
 		}
-		else {
-			if (mts.hours < ots.hours) {
-				return true;
-			}
-			else if (mts.hours > ots.hours) {
-				return false;
-			}
-			else {
-				if (mts.minutes < ots.minutes) {
-					return true;
-				}
-				else if (mts.minutes > ots.minutes) {
-					return false;
-				}
-				else {
-					if (mts.seconds < ots.seconds) {
-						return true;
-					}
-					else {
-						return false;
-					}
-				}
-			}
+		if (mts.hours < ots.hours) {
+			return true;
 		}
+		if (mts.hours > ots.hours) {
+			return false;
+		}
+		if (mts.minutes < ots.minutes) {
+			return true;
+		}
+		if (mts.minutes > ots.minutes) {
+			return false;
+		}
+		if (mts.seconds < ots.seconds) {
+			return true;
+		}
+		
+        return false;
 	}
 
 	bool operator>(const timespan &mts, const timespan &ots)
