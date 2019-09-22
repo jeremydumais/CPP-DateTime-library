@@ -1,8 +1,4 @@
 #include "../../src/datetime.h"
-#include <iostream>
-#include <assert.h>
-#include <cstring>
-#include <exception>
 #include <gtest/gtest.h>
 
 using namespace jed_utils;

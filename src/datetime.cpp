@@ -74,17 +74,17 @@ namespace jed_utils
 	}
 
 	//Copy constructor
-	datetime::datetime(const datetime &other)
+	datetime::datetime(const datetime& other)
 	{
 		timeInfo = new tm();
 		_copy_from(other.timeInfo);
 	}
 
 	//Copy assignment
-	datetime& datetime::operator=(const datetime &dt)
+	datetime& datetime::operator=(const datetime& other)
 	{
-		if (this != &dt) {
-			_copy_from(dt.timeInfo);
+		if (this != &other) {
+			_copy_from(other.timeInfo);
 		}
 		return *this;
 	}
@@ -120,36 +120,31 @@ namespace jed_utils
 
 	bool datetime::_is_leapyear(int year) const
 	{
-		if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0));
 	}
 
 	string datetime::to_string() const
 	{
 		char retVal[128] = "";
-		sprintf(retVal, "%d-%02d-%02d %02d:%02d:%02d",
+		sprintf(static_cast<char *>(retVal), "%d-%02d-%02d %02d:%02d:%02d",
 			get_year(),
 			get_month(),
 			get_day(),
 			get_hour(),
 			get_minute(),
 			get_second());
-		return string(retVal);
+		return string(static_cast<char *>(retVal));
 
 	}
 
 	string datetime::to_string(const string& format) const
 	{
-		string retVal = "";
+		string retVal;
 
 		if (strcmp(format.c_str(), "") == 0) {
 			throw invalid_argument("format");
 		}
-		string pattern_temp = "";
+		string pattern_temp;
 		for (unsigned int index_char = 0; index_char < format.length(); index_char++) {
 			bool is_letter = false;
 			//Check if the character is a valid pattern char
@@ -169,36 +164,36 @@ namespace jed_utils
 				//int *ptr_date_section = nullptr;
 				char value_converted[5] = "";
 				if (pattern_temp == "yyyy") {
-					sprintf(value_converted, "%04d", this->get_year());
-					retVal += value_converted;
+					sprintf(static_cast<char *>(value_converted), "%04d", this->get_year());
+					retVal += static_cast<char *>(value_converted);
 				}
 				else if (pattern_temp == "yy") {
-					sprintf(value_converted, "%02d", this->get_year() % 100);
-					retVal += value_converted;
+					sprintf(static_cast<char *>(value_converted), "%02d", this->get_year() % 100);
+					retVal += static_cast<char *>(value_converted);
 				}
 				else if (pattern_temp == "MM") {
-					sprintf(value_converted, "%02d", this->get_month());
-					retVal += value_converted;
+					sprintf(static_cast<char *>(value_converted), "%02d", this->get_month());
+					retVal += static_cast<char *>(value_converted);
 				}
 				else if (pattern_temp == "M") {
-					sprintf(value_converted, "%01d", this->get_month());
-					retVal += value_converted;
+					sprintf(static_cast<char *>(value_converted), "%01d", this->get_month());
+					retVal += static_cast<char *>(value_converted);
 				}
 				else if (pattern_temp == "dd") {
-					sprintf(value_converted, "%02d", this->get_day());
-					retVal += value_converted;
+					sprintf(static_cast<char *>(value_converted), "%02d", this->get_day());
+					retVal += static_cast<char *>(value_converted);
 				}
 				else if (pattern_temp == "d") {
-					sprintf(value_converted, "%01d", this->get_day());
-					retVal += value_converted;
+					sprintf(static_cast<char *>(value_converted), "%01d", this->get_day());
+					retVal += static_cast<char *>(value_converted);
 				}
 				else if (pattern_temp == "HH") {
-					sprintf(value_converted, "%02d", this->get_hour());
-					retVal += value_converted;
+					sprintf(static_cast<char *>(value_converted), "%02d", this->get_hour());
+					retVal += static_cast<char *>(value_converted);
 				}
 				else if (pattern_temp == "H") {
-					sprintf(value_converted, "%01d", this->get_hour());
-					retVal += value_converted;
+					sprintf(static_cast<char *>(value_converted), "%01d", this->get_hour());
+					retVal += static_cast<char *>(value_converted);
 				}
 				else if (pattern_temp == "hh") {
 					int instance_hour = this->get_hour();
@@ -206,12 +201,12 @@ namespace jed_utils
 						retVal += "12";
 					}
 					else if (instance_hour > 12) {
-						sprintf(value_converted, "%02d", instance_hour - 12);
-						retVal += value_converted;
+						sprintf(static_cast<char *>(value_converted), "%02d", instance_hour - 12);
+						retVal += static_cast<char *>(value_converted);
 					}
 					else {
-						sprintf(value_converted, "%02d", instance_hour);
-						retVal += value_converted;
+						sprintf(static_cast<char *>(value_converted), "%02d", instance_hour);
+						retVal += static_cast<char *>(value_converted);
 					}
 				}
 				else if (pattern_temp == "h") {
@@ -220,35 +215,37 @@ namespace jed_utils
 						retVal += "12";
 					}
 					else if (instance_hour > 12) {
-						sprintf(value_converted, "%01d", instance_hour - 12);
-						retVal += value_converted;
+						sprintf(static_cast<char *>(value_converted), "%01d", instance_hour - 12);
+						retVal += static_cast<char *>(value_converted);
 					}
 					else {
-						sprintf(value_converted, "%01d", instance_hour);
-						retVal += value_converted;
+						sprintf(static_cast<char *>(value_converted), "%01d", instance_hour);
+						retVal += static_cast<char *>(value_converted);
 					}
 				}
 				else if (pattern_temp == "mm") {
-					sprintf(value_converted, "%02d", this->get_minute());
-					retVal += value_converted;
+					sprintf(static_cast<char *>(value_converted), "%02d", this->get_minute());
+					retVal += static_cast<char *>(value_converted);
 				}
 				else if (pattern_temp == "m") {
-					sprintf(value_converted, "%01d", this->get_minute());
-					retVal += value_converted;
+					sprintf(static_cast<char *>(value_converted), "%01d", this->get_minute());
+					retVal += static_cast<char *>(value_converted);
 				}
 				else if (pattern_temp == "ss") {
-					sprintf(value_converted, "%02d", this->get_second());
-					retVal += value_converted;
+					sprintf(static_cast<char *>(value_converted), "%02d", this->get_second());
+					retVal += static_cast<char *>(value_converted);
 				}
 				else if (pattern_temp == "s") {
-					sprintf(value_converted, "%01d", this->get_second());
-					retVal += value_converted;
+					sprintf(static_cast<char *>(value_converted), "%01d", this->get_second());
+					retVal += static_cast<char *>(value_converted);
 				}
 				else if (pattern_temp == "tt") {
-					if (this->get_hour() >= 12)
+					if (this->get_hour() >= 12) {
 						retVal += "PM";
-					else
+					}
+					else {
 						retVal += "AM";
+					}
 				}
 
 				pattern_temp = "";
@@ -268,11 +265,11 @@ namespace jed_utils
 	string datetime::to_shortdate_string() const
 	{
 		char retVal[128] = "";
-		sprintf(retVal, "%d-%02d-%02d",
+		sprintf(static_cast<char *>(retVal), "%d-%02d-%02d",
 			get_year(),
 			get_month(),
 			get_day());
-		return string(retVal);
+		return string(static_cast<char *>(retVal));
 	}
 
 	int datetime::get_year() const
@@ -318,7 +315,7 @@ namespace jed_utils
 	void datetime::add_months(int nb_months)
 	{
 		//Get number of year
-		int nb_year = (int)ceil(nb_months / 12);
+		auto nb_year = static_cast<int>(ceil(nb_months / 12));
 		int nb_months_final = nb_months % 12;
 
 		if (timeInfo->tm_mon + nb_months_final > 11) { // tm_mon is from 0 to 11 
@@ -393,7 +390,7 @@ namespace jed_utils
 			throw invalid_argument("format");
 		}
 
-		string pattern_temp = "";
+		string pattern_temp;
 		int pattern_firstindex = 0;
 		bool is_letter = false;
 		period day_period = period::undefined;
@@ -465,7 +462,7 @@ namespace jed_utils
 		return datetime(year, month, day, hour, minute, second, day_period);
 	}
 
-	int datetime::_parse_intvalue(string pattern, int index, int mask_length, string parse_str)
+	int datetime::_parse_intvalue(const string &pattern, int index, int mask_length, const string &parse_str)
 	{
 		long converted_value;
 		int ret_val;
@@ -475,9 +472,10 @@ namespace jed_utils
 		string value_parsed = parse_str.substr(index, mask_length);
 		parse_str_chr = value_parsed.c_str();
 		converted_value = strtol(parse_str_chr, &end, 10);
-		if (parse_str_chr == end)
+		if (parse_str_chr == end) {
 			throw runtime_error("Unable to parse the mask " + pattern);
-		ret_val = (int)converted_value;
+		}
+		ret_val = static_cast<int>(converted_value);
 		return ret_val;
 	}
 
@@ -485,14 +483,14 @@ namespace jed_utils
 	std::ostream& operator<<(std::ostream &os, const datetime &dt)
 	{
 		char retVal[128] = "";
-		sprintf(retVal, "%d-%02d-%02d %02d:%02d:%02d",
+		sprintf(static_cast<char *>(retVal), "%d-%02d-%02d %02d:%02d:%02d",
 			dt.timeInfo->tm_year + 1900,
 			dt.timeInfo->tm_mon + 1,
 			dt.timeInfo->tm_mday,
 			dt.timeInfo->tm_hour,
 			dt.timeInfo->tm_min,
 			dt.timeInfo->tm_sec);
-		os << retVal;
+		os << static_cast<char *>(retVal);
 
 		return os;
 	}
@@ -535,7 +533,7 @@ namespace jed_utils
 		time_t time_mdt = mktime(mdt.timeInfo);
 		time_t time_odt = mktime(odt.timeInfo);
 		double difference = difftime(time_mdt, time_odt) / (60 * 60 * 24);
-		days = (int)difference;
+		days = static_cast<int>(difference);
 
 		if (mdt >= odt) {
 			hours = mdt.get_hour() - odt.get_hour();

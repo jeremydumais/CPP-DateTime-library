@@ -1,15 +1,15 @@
 #ifndef DATETIME_H
 #define DATETIME_H
 
-#include <ctime>
-#include <stdio.h>
-#include <string>
-#include <cstring>
-#include <stdlib.h>
-#include <stdexcept>
-#include <math.h>
-#include <iostream>
 #include "timespan.h"
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <iostream>
+#include <stdexcept>
+#include <string>
 
 #ifdef _WIN32
 	#ifdef DATETIME_EXPORTS  
@@ -31,8 +31,8 @@ namespace jed_utils
 	public:
 		datetime();
 		datetime(int year, int month, int day, int hour = 0, int minute = 0, int second = 0, period day_period = period::undefined);
-		datetime(const datetime&); //Copy constructor
-		datetime& operator=(const datetime &dt); //Copy assignment
+		datetime(const datetime& other); //Copy constructor
+		datetime& operator=(const datetime& other); //Copy assignment
 		datetime(datetime&& other) noexcept; //Move constructor
 		datetime& operator=(datetime&& other) noexcept; //Move assignement
 		virtual ~datetime();
@@ -70,7 +70,7 @@ namespace jed_utils
 		struct tm *timeInfo = nullptr;
 		bool auto_created = true;
 		bool _is_leapyear(int year) const;
-		static int _parse_intvalue(std::string pattern, int index, int mask_length, std::string parse_str);
+		static int _parse_intvalue(const std::string &pattern, int index, int mask_length, const std::string &parse_str);
 		void _copy_from(const tm* otm);
 	};
 } // namespace jed_utils

@@ -20,7 +20,7 @@ if(NOT CLANG_TIDY_EXE)
     message(STATUS "clang-tidy not found.")
 else()
     message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
-    set(DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-header-filter=.;-checks=*,-llvm-header-guard,-google-build-using-namespace,-fuchsia-default-arguments,-modernize-pass-by-value,-fuchsia-overloaded-operator,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-owning-memory")
+    set(DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-header-filter=.;-checks=*,-llvm-header-guard,-google-build-using-namespace,-fuchsia-default-arguments,-modernize-pass-by-value,-fuchsia-overloaded-operator,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-hicpp-vararg,-cppcoreguidelines-pro-type-vararg,-cppcoreguidelines-owning-memory")
 endif()
 
 #set(CMAKE_BUILD_TYPE Debug)
