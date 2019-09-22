@@ -2,6 +2,109 @@
 
 ## Jed# C++ DateTime library is a simple Date and time library built in C++.
 
+### How to build the DateTime library or integrate it in your application
+
+Follow this [link](https://github.com/jeremydumais/CPP-DateTime-library/wiki/How-to-build-the-DateTime-library-or-integrate-it-in-your-application) for a quick guide on how to build the DateTime library or integrate it in your application.
+
+### Here's some examples
+
+##### Get the current date and time
+
+```c++
+datetime dtTest = datetime();
+```
+
+##### Create a date
+
+```c++
+datetime dtTest = datetime(2016, 11, 25);
+```
+
+##### Create a date with time (year, month, day, hour, minute, second)
+
+```c++
+datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
+```
+
+##### Create a date with time (12 hour format) (year, month, day, hour, minute, second, period)
+
+```c++
+datetime dtTest = datetime(2016, 11, 25, 4, 12, 44, period::PM);
+```
+
+##### Add a week to a date
+
+```c++
+datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
+dtTest.add_days(7);
+```
+
+##### Substract a week from a date
+
+```c++
+datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
+dtTest.add_days(-7);
+```
+
+##### Display the date in standard form (yyyy-MM-dd HH:mm:ss)
+
+```c++
+datetime dtTest = datetime();
+cout << dtTest.to_string() << endl;
+```
+
+##### Display the date in custom format ("yyyy-MM-dd hh:mm:ss tt")
+
+```c++
+datetime dtTest = datetime();
+cout << dtTest.to_string("yyyy-MM-dd hh:mm:ss tt") << endl;
+```
+
+##### Get weekday of a datetime
+
+```c++
+//enum weekday { sunday, monday, tuesday, wednesday, thursday, friday, saturday };
+datetime dtTest = datetime(2015, 02, 14, 11, 11, 11);
+assert(dtTest.get_weekday() == weekday::saturday);
+```
+
+##### Parse a string to a datetime
+
+```c++
+datetime dtTest = datetime::parse(string("yyyy/MM/dd HH:mm:ss"), string("2016-08-18 23:14:42"));
+```
+
+##### Substracting two datetime objetcs (Example 1)
+
+```c++
+datetime date1(2016, 12, 31, 11, 32, 5);
+datetime date2(2016, 12, 25, 13, 55, 12);
+timespan ts1 = date2 - date1;
+assert(ts1.get_days() == -5);
+assert(ts1.get_hours() == -21);
+assert(ts1.get_minutes() == -36);
+assert(ts1.get_seconds() == -53);
+```
+
+##### Substracting two datetime objetcs (Example 2)
+
+```c++
+datetime date1(2016, 11, 25);
+datetime date2(2016, 12, 5);
+timespan ts1 = date2 - date1;
+assert(ts1.get_days() == 10);
+assert(ts1.get_hours() == 0);
+assert(ts1.get_minutes() == 0);
+assert(ts1.get_seconds() == 0);
+```
+
+##### Get total minutes of a timespan
+
+```c++
+timespan ts(0, 1, 3, 15);
+assert(ts.get_total_minutes() == 63);
+```
+
 ### datetime class
 
 #### Constructors
@@ -108,102 +211,3 @@ int get_total_seconds();
 | == | Equality operator | assert(timespan(1, 2, 3, 4) == timespan(1, 2, 3, 4)); |
 | != | Inequality operator | assert(timespan(1, 2, 3, 4) != timespan(1, 2, 3, 3)); |
 
-
-### Here's some examples
-
-##### Get the current date and time
-
-```c++
-datetime dtTest = datetime();
-```
-
-##### Create a date
-
-```c++
-datetime dtTest = datetime(2016, 11, 25);
-```
-
-##### Create a date with time (year, month, day, hour, minute, second)
-
-```c++
-datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
-```
-
-##### Create a date with time (12 hour format) (year, month, day, hour, minute, second, period)
-
-```c++
-datetime dtTest = datetime(2016, 11, 25, 4, 12, 44, period::PM);
-```
-
-##### Add a week to a date
-
-```c++
-datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
-dtTest.add_days(7);
-```
-
-##### Substract a week from a date
-
-```c++
-datetime dtTest = datetime(2016, 11, 25, 20, 12, 44);
-dtTest.add_days(-7);
-```
-
-##### Display the date in standard form (yyyy-MM-dd HH:mm:ss)
-
-```c++
-datetime dtTest = datetime();
-cout << dtTest.to_string() << endl;
-```
-
-##### Display the date in custom format ("yyyy-MM-dd hh:mm:ss tt")
-
-```c++
-datetime dtTest = datetime();
-cout << dtTest.to_string("yyyy-MM-dd hh:mm:ss tt") << endl;
-```
-
-##### Get weekday of a datetime
-
-```c++
-//enum weekday { sunday, monday, tuesday, wednesday, thursday, friday, saturday };
-datetime dtTest = datetime(2015, 02, 14, 11, 11, 11);
-assert(dtTest.get_weekday() == weekday::saturday);
-```
-
-##### Parse a string to a datetime
-
-```c++
-datetime dtTest = datetime::parse(string("yyyy/MM/dd HH:mm:ss"), string("2016-08-18 23:14:42"));
-```
-
-##### Substracting two datetime objetcs (Example 1)
-
-```c++
-datetime date1(2016, 12, 31, 11, 32, 5);
-datetime date2(2016, 12, 25, 13, 55, 12);
-timespan ts1 = date2 - date1;
-assert(ts1.get_days() == -5);
-assert(ts1.get_hours() == -21);
-assert(ts1.get_minutes() == -36);
-assert(ts1.get_seconds() == -53);
-```
-
-##### Substracting two datetime objetcs (Example 2)
-
-```c++
-datetime date1(2016, 11, 25);
-datetime date2(2016, 12, 5);
-timespan ts1 = date2 - date1;
-assert(ts1.get_days() == 10);
-assert(ts1.get_hours() == 0);
-assert(ts1.get_minutes() == 0);
-assert(ts1.get_seconds() == 0);
-```
-
-##### Get total minutes of a timespan
-
-```c++
-timespan ts(0, 1, 3, 15);
-assert(ts.get_total_minutes() == 63);
-```
