@@ -6,7 +6,7 @@
 
 Follow this [link](https://github.com/jeremydumais/CPP-DateTime-library/wiki/How-to-build-the-DateTime-library-or-integrate-it-in-your-application) for a quick guide on how to build the DateTime library or integrate it in your application.
 
-### Here's some examples
+### Some examples
 
 ##### Get the current date and time
 
