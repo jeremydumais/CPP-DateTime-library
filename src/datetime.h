@@ -36,7 +36,7 @@ namespace jed_utils
 		datetime(datetime&& other) noexcept; //Move constructor
 		datetime& operator=(datetime&& other) noexcept; //Move assignement
 		virtual ~datetime();
-		friend std::ostream& operator<<(std::ostream &os, const datetime &dt);
+		DATETIME_API friend std::ostream& operator<<(std::ostream &os, const datetime &dt);
 		DATETIME_API friend bool operator<(const datetime &mdt, const datetime &odt);
 		DATETIME_API friend bool operator>(const datetime &mdt, const datetime &odt);
 		DATETIME_API friend bool operator<=(const datetime &mdt, const datetime &odt);
@@ -70,7 +70,7 @@ namespace jed_utils
 		struct tm *timeInfo = nullptr;
 		bool auto_created = true;
 		bool _is_leapyear(int year) const;
-		static int _parse_intvalue(const std::string &pattern, int index, int mask_length, const std::string &parse_str);
+		static int _parse_intvalue(const std::string &pattern, int index, size_t mask_length, const std::string &parse_str);
 		void _copy_from(const tm* otm);
 	};
 } // namespace jed_utils

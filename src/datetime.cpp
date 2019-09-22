@@ -462,7 +462,7 @@ namespace jed_utils
 		return datetime(year, month, day, hour, minute, second, day_period);
 	}
 
-	int datetime::_parse_intvalue(const string &pattern, int index, int mask_length, const string &parse_str)
+	int datetime::_parse_intvalue(const string &pattern, int index, size_t mask_length, const string &parse_str)
 	{
 		long converted_value;
 		int ret_val;
