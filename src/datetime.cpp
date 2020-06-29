@@ -162,7 +162,7 @@ namespace jed_utils
 			//Check if the pattern has not changed
 			if (pattern_temp.length() > 0 && (format[index_char] != pattern_temp[pattern_temp.length() - 1] || index_char == format.length() - 1)) {
 				//int *ptr_date_section = nullptr;
-				char value_converted[11] = "";
+				char value_converted[20] = "";
 				if (pattern_temp == "yyyy") {
 					sprintf(static_cast<char *>(value_converted), "%04d", this->get_year());
 					retVal += static_cast<char *>(value_converted);
