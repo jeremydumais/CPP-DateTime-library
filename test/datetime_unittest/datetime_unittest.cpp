@@ -1039,6 +1039,18 @@ TEST(datetime_operator_minus, Difference0Days7Hours23Mins7Secs_ReturnOK)
 	assert(ts1.get_seconds() == 7);
 }
 
+TEST(datetime_operator_minus, Difference2Days17Hours1Mins58Secs_ReturnOK)
+{
+	datetime date1 = datetime(2023, 2, 27, 15, 58, 2);
+	datetime date2 = datetime(2023, 3, 2, 9, 0, 0);
+	timespan ts1 = date2 - date1;
+	assert(ts1.get_days() == 2);
+	assert(ts1.get_hours() == 17);
+	assert(ts1.get_minutes() == 1);
+	assert(ts1.get_seconds() == 58);
+	assert(ts1.get_total_seconds() == 61318 + 3600 * 24 * 2);
+}
+
 TEST(datetime_static_is_leapyear, Year2000_ReturnTrue)
 {
 	ASSERT_TRUE(datetime::is_leapyear(2000));

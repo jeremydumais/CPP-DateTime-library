@@ -539,6 +539,17 @@ namespace jed_utils
 			hours = mdt.get_hour() - odt.get_hour();
 			seconds = mdt.get_second() - odt.get_second();
 			minutes = mdt.get_minute() - odt.get_minute();
+			if (seconds < 0) {
+				seconds += 60;
+				minutes--;
+			}
+			if (minutes < 0) {
+				minutes += 60;
+				hours--;
+			}
+			if (hours < 0) {
+				hours += 24;
+			}
 		}
 		else {
 			if (mdt.get_second() > odt.get_second()) {
