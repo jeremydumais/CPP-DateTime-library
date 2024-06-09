@@ -1,5 +1,8 @@
 # Jed# C++ DateTime Library
 
+[![build](https://github.com/jeremydumais/CPP-DateTime-library/actions/workflows/cmake.yml/badge.svg)](https://github.com/jeremydumais/CPP-DateTime-library/actions/workflows/cmake.yml)
+![Latest version](https://img.shields.io/badge/latest_version-1.0.1-brightgreen)
+
 ## Jed# C++ DateTime library is a simple Date and time library built in C++.
 
 ### How to build the DateTime library or integrate it in your application
@@ -110,12 +113,12 @@ assert(ts.get_total_minutes() == 63);
 #### Constructors
 ```c++
 datetime(); // Get the current date and time
-datetime(int year, 
-	int month, 
-	int day, 
-	int hour = 0, 
-	int minute = 0, 
-	int second = 0, 
+datetime(int year,
+	int month,
+	int day,
+	int hour = 0,
+	int minute = 0,
+	int second = 0,
 	period day_period = period::undefined);
 ```
 
@@ -137,11 +140,11 @@ void add_hours(int nb_hours);
 void add_minutes(int nb_minutes);
 void add_seconds(int nb_seconds);
 bool is_leapyear();
-static datetime parse(string format, string value); 
-//NB: At this time only the following format specifiers (yyyy, MM, dd, HH, hh, mm, ss and tt) 
+static datetime parse(string format, string value);
+//NB: At this time only the following format specifiers (yyyy, MM, dd, HH, hh, mm, ss and tt)
 //    are supported by the parse method.
 static bool is_leapyear(int year);
-```	
+```
 
 #### Supported operators
 
@@ -155,7 +158,7 @@ static bool is_leapyear(int year);
 | == | Equality operator | assert(datetime(2017, 1, 8, 15, 28, 23) == datetime(2017, 1, 8, 15, 28, 23)); |
 | != | Inequality operator | assert(datetime(2017, 1, 8, 15, 28, 23) != datetime(2017, 1, 8, 15, 28, 22)); |
 | - | Minus operator | datetime dtTest = datetime(2015, 02, 11, 13, 00, 00);<br>datetime dtTest2 = datetime(2015, 02, 14, 15, 00, 00);<br>timespan tsTest = dtTest2 - dtTest;<br>assert(tsTest.get_days() == 3);<br>assert(tsTest.get_hours() == 2); |
-	
+
 #### Custom Date and Time Format Strings
 
 | Format specifier | Description |
@@ -198,7 +201,7 @@ int get_seconds();
 int get_total_hours();
 int get_total_minutes();
 int get_total_seconds();
-```	
+```
 
 #### Supported operators
 
