@@ -23,7 +23,14 @@ else()
     set(DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-header-filter=.;-checks=*,-llvm-header-guard,-google-build-using-namespace,-fuchsia-default-arguments,-modernize-pass-by-value,-fuchsia-overloaded-operator,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-hicpp-vararg,-cppcoreguidelines-pro-type-vararg,-cppcoreguidelines-owning-memory")
 endif()
 
-#set(CMAKE_BUILD_TYPE Debug)
+# Define project version
+set(PROJECT_VERSION_MAJOR 1)
+set(PROJECT_VERSION_MINOR 0)
+set(PROJECT_VERSION_PATCH 2)
+set(PROJECT_VERSION_TWEAK 0)
+
+set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+set(PROJECT_VERSION_FULL "${PROJECT_VERSION}.${PROJECT_VERSION_TWEAK}")
 
 # Set directories
 set(PROJECT_PATH    "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -75,6 +82,20 @@ endif(((NOT CMAKE_BUILD_TYPE)
 set(PROJECT_SOURCE_FILES ${SRC_PATH}/datetime.cpp
     ${SRC_PATH}/timespan.cpp)
 
+if (WIN32)
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+    include(generate_product_version)
+    generate_product_version(
+        VersionFilesOutputVariable
+        NAME "CPP-DateTime-library"
+        ICON "${PATH_TO_APPLICATION_ICON}"
+        VERSION_MAJOR ${PROJECT_VERSION_MAJOR}
+        VERSION_MINOR ${PROJECT_VERSION_MINOR}
+        VERSION_PATCH ${PROJECT_VERSION_PATCH}
+        VERSION_REVISION ${PROJECT_VERSION_TWEAK}
+        )
+endif()
+
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 	#For MSVC create the library as a shared library
 	add_library(${PROJECT_NAME} SHARED
@@ -87,6 +108,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 else()
 	#For other compiler create the library as a static library
 	add_library(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
+    set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR})
 	if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") #gcc
 		# https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
 		target_compile_options(${PROJECT_NAME}
@@ -132,7 +154,7 @@ if (BUILD_TESTING)
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/googletest-download )
   if(result)
     message(FATAL_ERROR "Build step for googletest failed: ${result}")
-  endif() 
+  endif()
 
   # Prevent overriding the parent project's compiler/linker
   # settings on Windows
