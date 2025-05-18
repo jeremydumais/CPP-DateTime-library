@@ -178,16 +178,52 @@ if (BUILD_TESTING)
 
 endif()
 
-install (TARGETS ${PROJECT_NAME} DESTINATION lib)
-install(DIRECTORY src/ DESTINATION include/datetime
-            FILES_MATCHING PATTERN "*.h")
+# Install rules
+install(TARGETS datetime
+    EXPORT datetimeTargets
+    LIBRARY DESTINATION lib/datetime
+    ARCHIVE DESTINATION lib/datetime
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include
+)
 
+install(DIRECTORY ${SRC_PATH}/
+    DESTINATION include/datetime
+    FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+)
+
+install(EXPORT datetimeTargets
+    FILE datetimeTargets.cmake
+    NAMESPACE datetime::
+    DESTINATION lib/cmake/datetime
+)
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/datetimeConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/datetimeConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/datetimeConfig.cmake"
+    INSTALL_DESTINATION lib/cmake/datetime
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/datetimeConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/datetimeConfigVersion.cmake"
+    DESTINATION lib/cmake/datetime
+)
 
 # Uninstall target
-CONFIGURE_FILE(
-	"${CMAKE_CURRENT_SOURCE_DIR}/cmake/CMakeUninstall.cmake.in"
-	"${CMAKE_CURRENT_BINARY_DIR}/cmake/CMakeUninstall.cmake"
-  IMMEDIATE @ONLY)
-ADD_CUSTOM_TARGET(uninstall
-	"${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake/CMakeUninstall.cmake")
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CMakeUninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY
+)
 
+add_custom_target(uninstall
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
+)
