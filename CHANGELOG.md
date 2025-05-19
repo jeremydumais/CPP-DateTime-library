@@ -16,6 +16,10 @@ project.
     You should also use datetime namespace when targeting the library.
 
     Ex: target_link_libraries(${PROJECT_NAME} datetime::datetime)
+- The build system has been adjusted to ensure the library can be compiled in
+either static or shared mode. Before this change, it was forced to be compiled
+in shared mode on Windows and static mode on other platforms. For compatibility
+reasons, this default behavior has been retained.
 
 ## [1.0.1]
 

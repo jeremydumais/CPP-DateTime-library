@@ -1,7 +1,7 @@
 # Jed# C++ DateTime Library
 
 [![build](https://github.com/jeremydumais/CPP-DateTime-library/actions/workflows/cmake.yml/badge.svg)](https://github.com/jeremydumais/CPP-DateTime-library/actions/workflows/cmake.yml)
-![Latest version](https://img.shields.io/badge/latest_version-1.0.1-brightgreen)
+![Latest version](https://img.shields.io/badge/latest_version-1.0.2-brightgreen)
 
 ## Jed# C++ DateTime library is a simple Date and time library built in C++.
 
