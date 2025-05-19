@@ -112,7 +112,7 @@ endif()
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 	#For MSVC
 	add_library(${PROJECT_NAME} 
-		${PROJECT_SOURCE_FILES})
+		${PROJECT_SOURCE_FILES} ${VersionFilesOutputVariable})
     set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS})
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     if(${BUILD_SHARED_LIBS})
