@@ -2,13 +2,15 @@
 #define TIMESPAN_H
 
 #ifdef _WIN32
-#ifdef DATETIME_EXPORTS
-#define TIMESPAN_API __declspec(dllexport)
+#ifdef DATETIME_STATIC
+        #define TIMESPAN_API
+    #elif defined(DATETIME_EXPORTS)
+      #define TIMESPAN_API __declspec(dllexport)
+   #else
+      #define TIMESPAN_API __declspec(dllimport)
+   #endif
 #else
-#define TIMESPAN_API __declspec(dllimport)
-#endif
-#else
-#define TIMESPAN_API
+   #define TIMESPAN_API
 #endif
 
 namespace jed_utils {
