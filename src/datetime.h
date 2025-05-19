@@ -12,13 +12,15 @@
 #include "timespan.h"
 
 #ifdef _WIN32
-#ifdef DATETIME_EXPORTS
-#define DATETIME_API __declspec(dllexport)
+   #ifdef DATETIME_STATIC
+        #define DATETIME_API
+    #elif defined(DATETIME_EXPORTS)
+      #define DATETIME_API __declspec(dllexport)
+   #else
+      #define DATETIME_API __declspec(dllimport)
+   #endif
 #else
-#define DATETIME_API __declspec(dllimport)
-#endif
-#else
-#define DATETIME_API
+   #define DATETIME_API
 #endif
 
 namespace jed_utils {
