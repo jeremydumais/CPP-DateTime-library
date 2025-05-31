@@ -20,5 +20,5 @@ jobs:
         git config --global user.email "jeremydumais@hotmail.com"
         git config --global user.name "Jeremy Dumais"
 
-        git remote add azure https://jeremydumais:${AZURE_PAT}@dev.azure.com/CPP-DateTime-Library/_git/CPP-DateTime-Library
+        git remote add azure https://jeremydumais:${AZURE_PAT}@jeremydumais.visualstudio.com/CPP-DateTime-Library/_git/CPP-DateTime-Library
         git push --mirror azure
