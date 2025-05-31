@@ -5,9 +5,18 @@
 
 ## Jed# C++ DateTime library is a simple Date and time library built in C++.
 
-### How to build the DateTime library or integrate it in your application
+##### The library is cross-platform and has been tested on Linux, Windows and macOS.
 
-Follow this [link](https://github.com/jeremydumais/CPP-DateTime-library/wiki/How-to-build-the-DateTime-library-or-integrate-it-in-your-application) for a quick guide on how to build the DateTime library or integrate it in your application.
+## 🛠️ How to build the DateTime library
+
+👉 Refer to this [guide](https://github.com/jeremydumais/CPP-DateTime-library/wiki/How-to-build-the-DateTime-library) for instructions on building the library.<br/>
+👉 Refer to this [guide](https://github.com/jeremydumais/CPP-DateTime-library/wiki/How-to-consume-the-DateTime-library-in-your-application) for instructions on consuming the library in your own applications.<br/>
+
+Follow these guides for platform-specific instructions:
+[Windows](https://github.com/jeremydumais/CPP-DateTime-library/wiki/%5BWindows%5D-Build-the-CPP-DateTime-library)
+, [Linux](https://github.com/jeremydumais/CPP-DateTime-library/wiki/%5BLinux%5D-Build-the-CPP-DateTime-library)
+and [macOS](https://github.com/jeremydumais/CPP-DateTime-library/wiki/%5BmacOS%5D-Build-the-CPP-DateTime-library).
+
 
 ### Some examples
 
