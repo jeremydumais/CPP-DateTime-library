@@ -17,6 +17,7 @@ Follow these guides for platform-specific instructions:
 , [Linux](https://github.com/jeremydumais/CPP-DateTime-library/wiki/%5BLinux%5D-Build-the-CPP-DateTime-library)
 and [macOS](https://github.com/jeremydumais/CPP-DateTime-library/wiki/%5BmacOS%5D-Build-the-CPP-DateTime-library).
 
+## ⚙ How it works
 
 ### Some examples
 
@@ -223,3 +224,14 @@ int get_total_seconds();
 | == | Equality operator | assert(timespan(1, 2, 3, 4) == timespan(1, 2, 3, 4)); |
 | != | Inequality operator | assert(timespan(1, 2, 3, 4) != timespan(1, 2, 3, 3)); |
 
+
+## 🧪 Unit tests
+[How to run the unit tests](https://github.com/jeremydumais/CPP-DateTime-library/wiki/Run-the-unit-tests)
+
+## 📚 Documentation
+
+See the classes documentation [here](https://github.com/jeremydumais/CPP-DateTime-library/wiki/Classes-documentation)
+
+## ⚖️ License
+
+See [LICENSE](LICENSE)
