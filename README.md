@@ -2,6 +2,10 @@
 
 [![build](https://github.com/jeremydumais/CPP-DateTime-library/actions/workflows/cmake.yml/badge.svg)](https://github.com/jeremydumais/CPP-DateTime-library/actions/workflows/cmake.yml)
 ![Latest version](https://img.shields.io/badge/latest_version-1.0.2-brightgreen)
+[![language](https://img.shields.io/badge/language-c++-0078D4)](#)
+[![OS](https://img.shields.io/badge/OS-linux%2C%20windows%2C%20macOS-0078D4)](#)
+
+⭐ Star us on GitHub — it motivates us a lot!
 
 ## Jed# C++ DateTime library is a simple Date and time library built in C++.
 
