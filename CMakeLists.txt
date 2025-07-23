@@ -37,7 +37,7 @@ set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT
 set(PROJECT_VERSION_FULL "${PROJECT_VERSION}.${PROJECT_VERSION_TWEAK}")
 
 # Keep same behavior than previous version to avoid breaking change
-# Windows will build as a shared library by default and it will be 
+# Windows will build as a shared library by default and it will be
 # a static build on other platform
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
@@ -111,7 +111,7 @@ endif()
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 	#For MSVC
-	add_library(${PROJECT_NAME} 
+	add_library(${PROJECT_NAME}
 		${PROJECT_SOURCE_FILES} ${VersionFilesOutputVariable})
     set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS})
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
@@ -246,6 +246,8 @@ configure_file(
     IMMEDIATE @ONLY
 )
 
-add_custom_target(uninstall
-    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
-)
+if (NOT TARGET uninstall)
+    add_custom_target(uninstall
+        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
+    )
+endif()
